@@ -2,11 +2,11 @@ package variables
 
 import (
 	"io/ioutil"
-	"os"
 
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
+	"github.com/openpixel/rise/interpolation"
 )
 
 // Config is a variable file config definition
@@ -33,39 +33,37 @@ func LoadVariableFiles(varFiles []string) (map[string]ast.Variable, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, variable := range config.Variables {
-			err := hil.Walk(&variable.Value, func(data *hil.WalkData) error {
-				result, err := hil.Eval(data.Root, &hil.EvalConfig{
-					GlobalScope: &ast.BasicScope{
-						FuncMap: map[string]ast.Function{
-							"env": ast.Function{
-								ArgTypes:   []ast.Type{ast.TypeString},
-								ReturnType: ast.TypeString,
-								Variadic:   false,
-								Callback: func(inputs []interface{}) (interface{}, error) {
-									input := inputs[0].(string)
-									return os.Getenv(input), nil
-								},
-							},
-						},
-					},
-				})
-				if err != nil {
-					return err
-				}
-				data.Replace = true
-				data.ReplaceValue = result.Value.(string)
-				return nil
-			})
-			astVar, err := hil.InterfaceToVariable(variable.Value)
-			if err != nil {
-				return nil, err
-			}
-			vars[variable.Name] = astVar
+		err = interpolateVariables(vars, config)
+		if err != nil {
+			return nil, err
 		}
 	}
 
 	return vars, nil
+}
+
+func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
+	for _, variable := range config.Variables {
+		err := hil.Walk(&variable.Value, func(data *hil.WalkData) error {
+			result, err := hil.Eval(data.Root, &hil.EvalConfig{
+				GlobalScope: &ast.BasicScope{
+					FuncMap: interpolation.CoreFunctions,
+				},
+			})
+			if err != nil {
+				return err
+			}
+			data.Replace = true
+			data.ReplaceValue = result.Value.(string)
+			return nil
+		})
+		astVar, err := hil.InterfaceToVariable(variable.Value)
+		if err != nil {
+			return err
+		}
+		vars[variable.Name] = astVar
+	}
+	return nil
 }
 
 // parseConfig will parse the text into variable definitions
