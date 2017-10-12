@@ -1,14 +1,10 @@
 package rise
 
 import (
+	"io"
 	"io/ioutil"
-
-	"github.com/hashicorp/hil"
+	"os"
 )
-
-func buildConfig() *hil.EvalConfig {
-	return &hil.EvalConfig{}
-}
 
 // Run will run
 func Run(inputFile, outputFile *string, varFiles *[]string) error {
@@ -17,19 +13,26 @@ func Run(inputFile, outputFile *string, varFiles *[]string) error {
 		return err
 	}
 
-	tree, err := hil.Parse(string(contents))
+	t, err := newTemplate(varFiles)
 	if err != nil {
 		return err
 	}
 
-	result, err := hil.Eval(tree, buildConfig())
+	result, err := t.render(string(contents))
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile(*outputFile, []byte(result.Value.(string)), 0644)
-	if err != nil {
-		return err
+	if *outputFile != "" {
+		err = ioutil.WriteFile(*outputFile, []byte(result.Value.(string)), 0644)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err = io.WriteString(os.Stdout, result.Value.(string))
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

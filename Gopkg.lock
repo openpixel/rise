@@ -15,6 +15,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/hcl"
+  packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
+  revision = "42e33e2d55a0ff1d6263f738896ea8c13571a8d0"
+
+[[projects]]
+  branch = "master"
   name = "github.com/hashicorp/hil"
   packages = [".","ast","parser","scanner"]
   revision = "fa9f258a92500514cc8e9c67020487709df92432"
@@ -40,6 +46,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "693fed3f60e7b89a6f1bf79675c902b6c74ed972c37c86c409303067e52247f0"
+  inputs-digest = "67dab2cfe8bd2585587c286e2973e56c39dc45a1bec0c6266c5655b814c234ea"
   solver-name = "gps-cdcl"
   solver-version = 1
