@@ -57,6 +57,9 @@ func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
 			data.ReplaceValue = result.Value.(string)
 			return nil
 		})
+		if err != nil {
+			return err
+		}
 		astVar, err := hil.InterfaceToVariable(variable.Value)
 		if err != nil {
 			return err
