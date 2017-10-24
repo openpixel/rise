@@ -14,16 +14,16 @@ You can see the usage documation for the CLI by running `rise --help`.
 
 ```
 $ rise --help
-A simple template substitution tool.
+A powerful text interpolation tool.
 
 Usage:
   rise [flags]
 
 Flags:
   -h, --help                  help for rise
-  -i, --input string          The file to perform substitution on
+  -i, --input string          The file to perform interpolation on
   -o, --output string         The file to output
-      --varFile stringSlice   The files that contains the variables to be substituted
+      --varFile stringSlice   The files that contains the variables to be interpolated
 ```
 
 ### Input (required)
