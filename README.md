@@ -2,11 +2,18 @@
 
 Powerful text interpolation.
 
+## Installation
+
+```
+$ go get -u github.com/openpixel/rise
+```
+
 ## Usage
 
 You can see the usage documation for the CLI by running `rise --help`.
 
 ```
+$ rise --help
 A simple template substitution tool.
 
 Usage:
@@ -48,7 +55,7 @@ variable "i" {
 And ran the following command
 
 ```
-rise ... --varFile vars.hcl --varFile vars2.hcl
+$ rise ... --varFile vars.hcl --varFile vars2.hcl
 ```
 
 The value of `i` would be `10`.
@@ -57,7 +64,9 @@ The value of `i` would be `10`.
 
 Look in the [examples](https://github.com/OpenPixel/rise/tree/master/examples) directory for an example, including inheritance:
 
-`rise -i ./examples/basic.tmpl -o ./examples/basic.txt --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl`
+```
+$ rise -i ./examples/basic.tmpl -o ./examples/basic.txt --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl
+```
 
 ## Interpolation Methods
 
