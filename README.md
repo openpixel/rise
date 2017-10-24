@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/OpenPixel/rise.svg?branch=master)](https://travis-ci.org/OpenPixel/rise)
+[![Go Report Card](https://goreportcard.com/badge/github.com/openpixel/rise)](https://goreportcard.com/report/github.com/openpixel/rise)
+
 # rise
 
 Powerful text interpolation.
