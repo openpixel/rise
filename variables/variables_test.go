@@ -151,7 +151,7 @@ func TestLoadVariableFiles(t *testing.T) {
 			[]string{"../examples/vars.hcl", "../examples/vars2.hcl"},
 			map[string]ast.Variable{
 				"i": ast.Variable{
-					Value: "10",
+					Value: "6",
 					Type:  ast.TypeString,
 				},
 				"j": ast.Variable{
