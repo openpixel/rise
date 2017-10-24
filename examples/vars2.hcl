@@ -1,7 +1,3 @@
-variable "i" {
-  value = 10
-}
-
 variable "j" {
   value = "${env("J_VAL")}"
 }

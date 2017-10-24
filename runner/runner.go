@@ -1,9 +1,11 @@
-package rise
+package runner
 
 import (
 	"io"
 	"io/ioutil"
 	"os"
+
+	"github.com/openpixel/rise/template"
 )
 
 // Run will run
@@ -13,12 +15,12 @@ func Run(inputFile, outputFile *string, varFiles *[]string) error {
 		return err
 	}
 
-	t, err := newTemplate(varFiles)
+	t, err := template.NewTemplate(varFiles)
 	if err != nil {
 		return err
 	}
 
-	result, err := t.render(string(contents))
+	result, err := t.Render(string(contents))
 	if err != nil {
 		return err
 	}

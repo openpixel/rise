@@ -1,4 +1,4 @@
-package rise
+package template
 
 import (
 	"github.com/hashicorp/hil"
@@ -7,21 +7,23 @@ import (
 	"github.com/openpixel/rise/variables"
 )
 
-type template struct {
+// Template is a container for holding onto the ast Variables
+type Template struct {
 	vars map[string]ast.Variable
 }
 
-func newTemplate(varFiles *[]string) (*template, error) {
+// NewTemplate will prepare a template object for use
+func NewTemplate(varFiles *[]string) (*Template, error) {
 	vars, err := variables.LoadVariableFiles(*varFiles)
 	if err != nil {
 		return nil, err
 	}
-	return &template{
+	return &Template{
 		vars: vars,
 	}, nil
 }
 
-func (t *template) buildConfig() *hil.EvalConfig {
+func (t *Template) buildConfig() *hil.EvalConfig {
 	return &hil.EvalConfig{
 		GlobalScope: &ast.BasicScope{
 			FuncMap: interpolation.CoreFunctions,
@@ -30,7 +32,8 @@ func (t *template) buildConfig() *hil.EvalConfig {
 	}
 }
 
-func (t *template) render(text string) (hil.EvaluationResult, error) {
+// Render will parse the provided text and interpolate the known variables/funcs
+func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 	tree, err := hil.Parse(text)
 	if err != nil {
 		return hil.InvalidResult, err
