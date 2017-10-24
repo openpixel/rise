@@ -1,0 +1,10 @@
+language: go
+dist: trusty
+go:
+  - 1.8.4
+  - 1.9.1
+os:
+  - linux
+script:
+  - go test -race -v ./...
+  
