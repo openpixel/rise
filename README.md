@@ -79,3 +79,16 @@ $ rise -i ./examples/basic.tmpl -o ./examples/basic.txt --varFile ./examples/var
     - Convert the provided argument to uppercase
 - env
     - Find the provided environment variable
+
+## Coming Soon
+
+- More interpolation methods
+  - join
+  - split
+  - replace
+  - and many more!
+- Deeper documentation with examples for interpolation methods
+- More configuration CLI arguments
+  - Support for directories as inputs/outputs
+  - Support for globs (eg: /tmp/*.json)
+  - Support for var overrides at cli level (eg: --var "foo=bar")
