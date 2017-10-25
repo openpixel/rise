@@ -51,3 +51,22 @@ func TestInterpolationFuncUpper(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncJoin(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Joins multiple values",
+			text:        `${join(",", ${["Foo", "Bar"]}}`,
+			expectation: "Foo,Bar",
+			error:       false,
+		},
+	}
+
+	joinTestFunc := testInterpolationFunc("join", interpolationFuncJoin)
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			joinTestFunc(t, tc)
+		})
+	}
+}

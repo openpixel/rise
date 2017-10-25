@@ -12,6 +12,7 @@ var CoreFunctions = map[string]ast.Function{
 	"lower": interpolationFuncLower(),
 	"upper": interpolationFuncUpper(),
 	"env":   interpolationFuncEnv(),
+	"join":  interpolationFuncJoin(),
 }
 
 func interpolationFuncEnv() ast.Function {

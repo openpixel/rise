@@ -9,5 +9,5 @@ variable "k" {
 }
 
 variable "h" {
-  value = ["Foo"]
+  value = ["Foo", "Bar"]
 }

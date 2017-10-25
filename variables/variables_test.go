@@ -1,7 +1,6 @@
 package variables
 
 import (
-	"os"
 	"reflect"
 	"testing"
 
@@ -132,14 +131,6 @@ func TestInterpolateVariables(t *testing.T) {
 }
 
 func TestLoadVariableFiles(t *testing.T) {
-	jValOrig := os.Getenv("J_VAL")
-	defer func() {
-		err := os.Setenv("J_VAL", jValOrig)
-		if err != nil {
-			t.Fatal(err)
-		}
-	}()
-	os.Setenv("J_VAL", "2")
 	testCases := []struct {
 		description string
 		filenames   []string
@@ -148,7 +139,7 @@ func TestLoadVariableFiles(t *testing.T) {
 	}{
 		{
 			"Variable file inheritance",
-			[]string{"../examples/vars.hcl", "../examples/vars2.hcl"},
+			[]string{"testdata/var1.hcl", "testdata/var2.hcl"},
 			map[string]ast.Variable{
 				"i": ast.Variable{
 					Value: "6",
@@ -157,24 +148,6 @@ func TestLoadVariableFiles(t *testing.T) {
 				"j": ast.Variable{
 					Value: "2",
 					Type:  ast.TypeString,
-				},
-				"k": ast.Variable{
-					Value: map[string]ast.Variable{
-						"t": ast.Variable{
-							Value: "z",
-							Type:  ast.TypeString,
-						},
-					},
-					Type: ast.TypeMap,
-				},
-				"h": ast.Variable{
-					Value: []ast.Variable{
-						{
-							Value: "Foo",
-							Type:  ast.TypeString,
-						},
-					},
-					Type: ast.TypeList,
 				},
 			},
 			false,
