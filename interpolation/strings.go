@@ -1,7 +1,6 @@
 package interpolation
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -32,26 +31,19 @@ func interpolationFuncUpper() ast.Function {
 
 func interpolationFuncJoin() ast.Function {
 	return ast.Function{
-		ArgTypes:     []ast.Type{ast.TypeString},
-		ReturnType:   ast.TypeString,
-		Variadic:     true,
-		VariadicType: ast.TypeList,
+		ArgTypes:   []ast.Type{ast.TypeString, ast.TypeList},
+		ReturnType: ast.TypeString,
 		Callback: func(inputs []interface{}) (interface{}, error) {
-			if len(inputs) < 2 {
-				return nil, errors.New("must have 2 arguments to join")
-			}
 			var list []string
 
-			for _, arg := range inputs[1:] {
-				for _, part := range arg.([]ast.Variable) {
-					if part.Type != ast.TypeString {
-						return nil, fmt.Errorf(
-							"only works on string lists, this list contains elements of %s",
-							part.Type.Printable(),
-						)
-					}
-					list = append(list, part.Value.(string))
+			for _, arg := range inputs[1].([]ast.Variable) {
+				if arg.Type != ast.TypeString {
+					return nil, fmt.Errorf(
+						"only works on string lists, this list contains elements of %s",
+						arg.Type.Printable(),
+					)
 				}
+				list = append(list, arg.Value.(string))
 			}
 
 			return strings.Join(list, inputs[0].(string)), nil
