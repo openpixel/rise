@@ -1,6 +1,7 @@
 package interpolation
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -36,6 +37,9 @@ func interpolationFuncJoin() ast.Function {
 		Variadic:     true,
 		VariadicType: ast.TypeList,
 		Callback: func(inputs []interface{}) (interface{}, error) {
+			if len(inputs) < 2 {
+				return nil, errors.New("must have 2 arguments to join")
+			}
 			var list []string
 
 			for _, arg := range inputs[1:] {

@@ -11,7 +11,9 @@ type functionTestCase struct {
 	description string
 	text        string
 	expectation string
-	error       bool
+	parseError  bool
+	evalError   bool
+	vars        map[string]ast.Variable
 }
 
 func testInterpolationFunc(key string, interpolationFunc func() ast.Function) func(t *testing.T, testCase functionTestCase) {
@@ -24,14 +26,25 @@ func testInterpolationFunc(key string, interpolationFunc func() ast.Function) fu
 	}
 
 	return func(t *testing.T, testCase functionTestCase) {
+		if testCase.vars == nil {
+			config.GlobalScope.VarMap = map[string]ast.Variable{}
+		} else {
+			config.GlobalScope.VarMap = testCase.vars
+		}
 		tree, err := hil.Parse(testCase.text)
-		if err != nil != testCase.error {
+		if err != nil != testCase.parseError {
 			t.Fatalf("Unexpected error: %s\n", err)
+		}
+		if testCase.parseError {
+			return
 		}
 
 		actual, err := hil.Eval(tree, config)
-		if err != nil != testCase.error {
+		if err != nil != testCase.evalError {
 			t.Fatalf("Unexpected error: %s\n", err)
+		}
+		if testCase.evalError {
+			return
 		}
 
 		if actual.Value.(string) != testCase.expectation {
