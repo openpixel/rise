@@ -1,0 +1,5 @@
+{
+    "i": ${i},
+    "j": "${join(", ", h)}",
+    "other": "${upper("foobar")}"
+}

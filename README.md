@@ -68,7 +68,7 @@ The value of `i` would be `10`.
 Look in the [examples](https://github.com/OpenPixel/rise/tree/master/examples) directory for an example, including inheritance:
 
 ```
-$ rise -i ./examples/basic.tmpl -o ./examples/basic.txt --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl
+$ rise -i ./examples/input.json -o ./examples/output.json --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl
 ```
 
 ## Interpolation Methods
