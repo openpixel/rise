@@ -11,16 +11,27 @@ func TestInterpolationFuncHas(t *testing.T) {
 		{
 			description: "Key exists",
 			text:        `${has(foo, "bar")}`,
-			expectation: "false",
+			expectation: "true",
 			vars: map[string]ast.Variable{
 				"foo": ast.Variable{
 					Type: ast.TypeMap,
 					Value: map[string]ast.Variable{
-						"foo": ast.Variable{
+						"bar": ast.Variable{
 							Type:  ast.TypeString,
 							Value: "Bar",
 						},
 					},
+				},
+			},
+		},
+		{
+			description: "Key does not exist",
+			text:        `${has(foo, "bar")}`,
+			expectation: "false",
+			vars: map[string]ast.Variable{
+				"foo": ast.Variable{
+					Type:  ast.TypeMap,
+					Value: map[string]ast.Variable{},
 				},
 			},
 		},
