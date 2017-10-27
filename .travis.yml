@@ -1,0 +1,10 @@
+language: go
+dist: trusty
+go:
+  - 1.8.4
+  - 1.9.1
+os:
+  - linux
+go_import_path: github.com/openpixel/rise
+script:
+  - go test -race -v ./...

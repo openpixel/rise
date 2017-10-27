@@ -1,0 +1,4 @@
+vendor
+main
+dist
+examples/output.*
