@@ -2,6 +2,7 @@ package interpolation
 
 import (
 	"os"
+	"reflect"
 	"testing"
 
 	"github.com/hashicorp/hil"
@@ -12,7 +13,7 @@ type functionTestCase struct {
 	description string
 	setup       func() error
 	text        string
-	expectation string
+	expectation interface{}
 	parseError  bool
 	evalError   bool
 	teardown    func() error
@@ -56,8 +57,14 @@ func testInterpolationFunc(key string, interpolationFunc func() ast.Function) fu
 			return
 		}
 
-		if actual.Value.(string) != testCase.expectation {
-			t.Fatalf("wrong result\ngiven %s\ngot: %s\nwant: %s", testCase.text, actual, testCase.expectation)
+		if _, ok := testCase.expectation.(string); ok {
+			if actual.Value.(string) != testCase.expectation.(string) {
+				t.Fatalf("wrong result\ngiven %s\ngot: %#v\nwant: %#v", testCase.text, actual.Value, testCase.expectation)
+			}
+		} else {
+			if !reflect.DeepEqual(actual.Value, testCase.expectation) {
+				t.Fatalf("wrong result\ngiven %s\ngot: %#v\nwant: %#v", testCase.text, actual.Value, testCase.expectation)
+			}
 		}
 
 		if testCase.teardown != nil {

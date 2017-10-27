@@ -13,8 +13,12 @@ var CoreFunctions = map[string]ast.Function{
 	"upper": interpolationFuncUpper(),
 	"env":   interpolationFuncEnv(),
 	"join":  interpolationFuncJoin(),
+	"has":   interpolationFuncHas(),
+	"map":   interpolationFuncMap(),
+	"list":  interpolationFuncList(),
 }
 
+// interpolationFuncEnv will extract a variable out of the env
 func interpolationFuncEnv() ast.Function {
 	return ast.Function{
 		ArgTypes:   []ast.Type{ast.TypeString},

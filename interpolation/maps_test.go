@@ -45,3 +45,38 @@ func TestInterpolationFuncHas(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncMap(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Map is created",
+			text:        `${map("foo", "bar")}`,
+			expectation: map[string]interface{}{
+				"foo": "bar",
+			},
+		},
+		{
+			description: "Map with different types",
+			text:        `${map("foo", "bar", "key", "${map("flip", "flop")}")}`,
+			expectation: map[string]interface{}{
+				"foo": "bar",
+				"key": map[string]interface{}{
+					"flip": "flop",
+				},
+			},
+		},
+		{
+			description: "Odd argument count fails",
+			text:        `${map("foo")}`,
+			evalError:   true,
+		},
+	}
+
+	mapTestFunc := testInterpolationFunc("map", interpolationFuncMap)
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			mapTestFunc(t, tc)
+		})
+	}
+}
