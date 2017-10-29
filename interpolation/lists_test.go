@@ -39,7 +39,7 @@ func TestInterpoloationFuncConcat(t *testing.T) {
 		{
 			description: "Two lists combine",
 			text:        `${concat(foo, bar)}`,
-			expectation: []interface{}{"test1", "test2"},
+			expectation: []interface{}{"test1", "test3", "test2"},
 			vars: map[string]ast.Variable{
 				"foo": ast.Variable{
 					Type: ast.TypeList,
@@ -47,6 +47,10 @@ func TestInterpoloationFuncConcat(t *testing.T) {
 						{
 							Type:  ast.TypeString,
 							Value: "test1",
+						},
+						{
+							Type:  ast.TypeString,
+							Value: "test3",
 						},
 					},
 				},
