@@ -25,3 +25,20 @@ func interpolationFuncList() ast.Function {
 		},
 	}
 }
+
+// interpolationFuncConcat will concat multiple lists into a single list
+func interpolationFuncConcat() ast.Function {
+	return ast.Function{
+		ArgTypes:     []ast.Type{},
+		ReturnType:   ast.TypeList,
+		Variadic:     true,
+		VariadicType: ast.TypeList,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			result := make([]ast.Variable, 0)
+			for _, input := range inputs {
+				result = append(result, input.([]ast.Variable)...)
+			}
+			return result, nil
+		},
+	}
+}
