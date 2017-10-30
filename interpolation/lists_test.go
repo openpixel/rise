@@ -1,6 +1,10 @@
 package interpolation
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/hashicorp/hil/ast"
+)
 
 func TestInterpolationFuncList(t *testing.T) {
 	testCases := []functionTestCase{
@@ -26,6 +30,48 @@ func TestInterpolationFuncList(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
 			listTestFunc(t, tc)
+		})
+	}
+}
+
+func TestInterpoloationFuncConcat(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Two lists combine",
+			text:        `${concat(foo, bar)}`,
+			expectation: []interface{}{"test1", "test3", "test2"},
+			vars: map[string]ast.Variable{
+				"foo": ast.Variable{
+					Type: ast.TypeList,
+					Value: []ast.Variable{
+						{
+							Type:  ast.TypeString,
+							Value: "test1",
+						},
+						{
+							Type:  ast.TypeString,
+							Value: "test3",
+						},
+					},
+				},
+				"bar": ast.Variable{
+					Type: ast.TypeList,
+					Value: []ast.Variable{
+						{
+							Type:  ast.TypeString,
+							Value: "test2",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	concatTestFunc := testInterpolationFunc("concat", interpolationFuncConcat)
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			concatTestFunc(t, tc)
 		})
 	}
 }

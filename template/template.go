@@ -39,9 +39,6 @@ func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 		return hil.InvalidResult, err
 	}
 
-	if err != nil {
-		return hil.InvalidResult, err
-	}
 	result, err := hil.Eval(tree, t.buildConfig())
 	if err != nil {
 		return hil.InvalidResult, err
