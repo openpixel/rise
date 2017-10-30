@@ -57,7 +57,7 @@ func interpolationFuncConcat() ast.Function {
 					}
 				}
 			}
-			fmt.Printf("%#v", result)
+
 			return result, nil
 		},
 	}
