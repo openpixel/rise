@@ -77,24 +77,17 @@ Look in the [examples](https://github.com/OpenPixel/rise/tree/master/examples) d
 $ rise -i ./examples/input.json -o ./examples/output.json --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl
 ```
 
-## Interpolation Methods
-
-- lower
-    - Convert the provided argument to lowercase
-- upper
-    - Convert the provided argument to uppercase
-- env
-    - Find the provided environment variable
-
 ## Coming Soon
 
 - More interpolation methods
-  - join
-  - split
-  - replace
-  - and many more!
 - Deeper documentation with examples for interpolation methods
 - More configuration CLI arguments
   - Support for directories as inputs/outputs
   - Support for globs (eg: /tmp/*.json)
   - Support for var overrides at cli level (eg: --var "foo=bar")
+
+## Inspiration
+
+- [hashicorp/hil](https://github.com/hashicorp/hil) - Used to perform interpolation
+- [hashicorp/hcl](https://github.com/hashicorp/hcl) - Used as a configuration syntax for variables
+- [hashicorp/terraform](https://github.com/hashicorp/terraform) - Inspiration for the tool. A number of the interpolation functions have been extracted directly from terraform.
