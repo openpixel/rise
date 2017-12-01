@@ -80,3 +80,36 @@ func TestInterpolationFuncMap(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncKeys(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Returns the keys",
+			text:        `${keys(foo)}`,
+			expectation: []interface{}{"bar", "bar2"},
+			vars: map[string]ast.Variable{
+				"foo": ast.Variable{
+					Type: ast.TypeMap,
+					Value: map[string]ast.Variable{
+						"bar2": ast.Variable{
+							Type:  ast.TypeString,
+							Value: "other2",
+						},
+						"bar": ast.Variable{
+							Type:  ast.TypeString,
+							Value: "other",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	keysTestFunc := testInterpolationFunc("keys", interpolationFuncKeys)
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			keysTestFunc(t, tc)
+		})
+	}
+}

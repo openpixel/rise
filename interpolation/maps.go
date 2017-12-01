@@ -2,6 +2,7 @@ package interpolation
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/hashicorp/hil"
 
@@ -52,6 +53,34 @@ func interpolationFuncMap() ast.Function {
 					return nil, err
 				}
 				result[key] = nativeVar
+			}
+
+			return result, nil
+		},
+	}
+}
+
+// interpolationFuncKeys returns the keys of the provided map sorted in dictionary order
+func interpolationFuncKeys() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeMap},
+		ReturnType: ast.TypeList,
+		Variadic:   false,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			mapInput := inputs[0].(map[string]ast.Variable)
+			keys := make([]string, 0, len(mapInput)+1)
+			result := make([]ast.Variable, 0, len(mapInput)+1)
+			for key := range mapInput {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+
+			for _, key := range keys {
+				nativeKey, err := hil.InterfaceToVariable(key)
+				if err != nil {
+					return nil, err
+				}
+				result = append(result, nativeKey)
 			}
 
 			return result, nil
