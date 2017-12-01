@@ -98,15 +98,6 @@ result, err := tmpl.Render(input)
 fmt.Printf("Value: %s", result.Value.(string)) // Value: foo
 ```
 
-## Interpolation Methods
-
-- lower
-    - Convert the provided argument to lowercase
-- upper
-    - Convert the provided argument to uppercase
-- env
-    - Find the provided environment variable
-
 ## Coming Soon
 
 - More interpolation methods
