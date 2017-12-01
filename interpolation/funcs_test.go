@@ -113,6 +113,11 @@ func TestInterpolationFuncEnv(t *testing.T) {
 			expectation: "",
 			evalError:   true,
 		},
+		{
+			description: "Empty env ternary",
+			text:        `${env("FOO") != "" ? env("FOO") : "bar"}`,
+			expectation: "bar",
+		},
 	}
 
 	envTestFunc := testInterpolationFunc("env", interpolationFuncEnv)
