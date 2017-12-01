@@ -37,7 +37,7 @@ func TestInterpolationFuncHas(t *testing.T) {
 		},
 	}
 
-	hasTestFunc := testInterpolationFunc("has", interpolationFuncHas)
+	hasTestFunc := testInterpolationFunc(keyFuncs{"has": interpolationFuncHas})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
@@ -72,7 +72,7 @@ func TestInterpolationFuncMap(t *testing.T) {
 		},
 	}
 
-	mapTestFunc := testInterpolationFunc("map", interpolationFuncMap)
+	mapTestFunc := testInterpolationFunc(keyFuncs{"map": interpolationFuncMap})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
@@ -105,7 +105,7 @@ func TestInterpolationFuncKeys(t *testing.T) {
 		},
 	}
 
-	keysTestFunc := testInterpolationFunc("keys", interpolationFuncKeys)
+	keysTestFunc := testInterpolationFunc(keyFuncs{"keys": interpolationFuncKeys})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {

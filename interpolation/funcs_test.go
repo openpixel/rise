@@ -20,12 +20,16 @@ type functionTestCase struct {
 	vars        map[string]ast.Variable
 }
 
-func testInterpolationFunc(key string, interpolationFunc func() ast.Function) func(t *testing.T, testCase functionTestCase) {
+type keyFuncs map[string]func() ast.Function
+
+func testInterpolationFunc(funcMap keyFuncs) func(t *testing.T, testCase functionTestCase) {
+	configFuncs := make(map[string]ast.Function)
+	for key, interpolationFunc := range funcMap {
+		configFuncs[key] = interpolationFunc()
+	}
 	config := &hil.EvalConfig{
 		GlobalScope: &ast.BasicScope{
-			FuncMap: map[string]ast.Function{
-				key: interpolationFunc(),
-			},
+			FuncMap: configFuncs,
 		},
 	}
 
@@ -120,7 +124,7 @@ func TestInterpolationFuncEnv(t *testing.T) {
 		},
 	}
 
-	envTestFunc := testInterpolationFunc("env", interpolationFuncEnv)
+	envTestFunc := testInterpolationFunc(keyFuncs{"env": interpolationFuncEnv})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {

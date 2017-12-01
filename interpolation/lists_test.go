@@ -15,8 +15,8 @@ func TestInterpolationFuncList(t *testing.T) {
 		},
 		{
 			description: "Multi-type list",
-			text:        `${list("foo", "${list("bar")}")}`,
-			expectation: []interface{}{"foo", []interface{}{"bar"}},
+			text:        `${list("foo", "${list("bar")}", "${map("flip", "flop")}")}`,
+			expectation: []interface{}{"foo", []interface{}{"bar"}, map[string]interface{}{"flip": "flop"}},
 		},
 		{
 			description: "Empty list",
@@ -25,7 +25,7 @@ func TestInterpolationFuncList(t *testing.T) {
 		},
 	}
 
-	listTestFunc := testInterpolationFunc("list", interpolationFuncList)
+	listTestFunc := testInterpolationFunc(keyFuncs{"list": interpolationFuncList, "map": interpolationFuncMap})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
@@ -67,7 +67,7 @@ func TestInterpoloationFuncConcat(t *testing.T) {
 		},
 	}
 
-	concatTestFunc := testInterpolationFunc("concat", interpolationFuncConcat)
+	concatTestFunc := testInterpolationFunc(keyFuncs{"concat": interpolationFuncConcat})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {

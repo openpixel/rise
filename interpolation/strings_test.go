@@ -20,7 +20,7 @@ func TestInterpolationFuncLower(t *testing.T) {
 		},
 	}
 
-	lowerTestFunc := testInterpolationFunc("lower", interpolationFuncLower)
+	lowerTestFunc := testInterpolationFunc(keyFuncs{"lower": interpolationFuncLower})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
@@ -43,7 +43,7 @@ func TestInterpolationFuncUpper(t *testing.T) {
 		},
 	}
 
-	lowerTestFunc := testInterpolationFunc("upper", interpolationFuncUpper)
+	lowerTestFunc := testInterpolationFunc(keyFuncs{"upper": interpolationFuncUpper})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
@@ -105,11 +105,39 @@ func TestInterpolationFuncJoin(t *testing.T) {
 		},
 	}
 
-	joinTestFunc := testInterpolationFunc("join", interpolationFuncJoin)
+	joinTestFunc := testInterpolationFunc(keyFuncs{"join": interpolationFuncJoin})
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
 			joinTestFunc(t, tc)
+		})
+	}
+}
+
+func TestInterpolationFuncReplace(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Replace N occurences",
+			text:        `${replace("foo bar bar", " bar", "", -1)}`,
+			expectation: "foo",
+		},
+		{
+			description: "Replace 0 occurences",
+			text:        `${replace("foo bar bar", " bar", "", 0)}`,
+			expectation: "foo bar bar",
+		},
+		{
+			description: "Replace 1 occurences",
+			text:        `${replace("foo bar bar", " bar", "", 1)}`,
+			expectation: "foo bar",
+		},
+	}
+
+	replaceTestFunc := testInterpolationFunc(keyFuncs{"replace": interpolationFuncReplace})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			replaceTestFunc(t, tc)
 		})
 	}
 }

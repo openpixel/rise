@@ -53,3 +53,21 @@ func interpolationFuncJoin() ast.Function {
 		},
 	}
 }
+
+// interpolationFuncReplace replaces the occurences of a value on the provided string with another value.
+// The number of occurences to replace is the last argument to the function.
+func interpolationFuncReplace() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeString, ast.TypeString, ast.TypeString, ast.TypeInt},
+		ReturnType: ast.TypeString,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			input := inputs[0].(string)
+			search := inputs[1].(string)
+			replace := inputs[2].(string)
+			count := inputs[3].(int)
+
+			result := strings.Replace(input, search, replace, count)
+			return result, nil
+		},
+	}
+}
