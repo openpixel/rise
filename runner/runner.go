@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/openpixel/rise/template"
+	"github.com/openpixel/rise/variables"
 )
 
 // Run will run
@@ -15,7 +16,12 @@ func Run(inputFile, outputFile *string, varFiles *[]string) error {
 		return err
 	}
 
-	t, err := template.NewTemplate(varFiles)
+	vars, err := variables.LoadVariableFiles(*varFiles)
+	if err != nil {
+		return err
+	}
+
+	t, err := template.NewTemplate(vars)
 	if err != nil {
 		return err
 	}

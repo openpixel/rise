@@ -4,7 +4,6 @@ import (
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
 	"github.com/openpixel/rise/interpolation"
-	"github.com/openpixel/rise/variables"
 )
 
 // Template is a container for holding onto the ast Variables
@@ -13,10 +12,9 @@ type Template struct {
 }
 
 // NewTemplate will prepare a template object for use
-func NewTemplate(varFiles *[]string) (*Template, error) {
-	vars, err := variables.LoadVariableFiles(*varFiles)
-	if err != nil {
-		return nil, err
+func NewTemplate(vars map[string]ast.Variable) (*Template, error) {
+	if vars == nil {
+		vars = make(map[string]ast.Variable)
 	}
 	return &Template{
 		vars: vars,
