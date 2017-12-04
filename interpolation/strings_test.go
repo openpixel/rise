@@ -141,3 +141,26 @@ func TestInterpolationFuncReplace(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncContains(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "String does contain portion",
+			text:        `${contains("hello", "ell")}`,
+			expectation: "true",
+		},
+		{
+			description: "String does not contain portion",
+			text:        `${contains("hello", "foo")}`,
+			expectation: "false",
+		},
+	}
+
+	containsTestFunc := testInterpolationFunc(keyFuncs{"contains": interpolationFuncContains})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			containsTestFunc(t, tc)
+		})
+	}
+}

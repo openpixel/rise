@@ -71,3 +71,16 @@ func interpolationFuncReplace() ast.Function {
 		},
 	}
 }
+
+// interpolationFuncContains will check if a string contains the portion provided
+func interpolationFuncContains() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeString, ast.TypeString},
+		ReturnType: ast.TypeBool,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			val := inputs[0].(string)
+			portion := inputs[1].(string)
+			return strings.Contains(val, portion), nil
+		},
+	}
+}
