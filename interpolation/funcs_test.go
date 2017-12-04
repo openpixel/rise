@@ -132,3 +132,40 @@ func TestInterpolationFuncEnv(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncLength(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Length of string",
+			text:        `${length("FOO")}`,
+			expectation: "3",
+		},
+		{
+			description: "Length of list",
+			text:        `${length("${list("foo", "bar")}")}`,
+			expectation: "2",
+		},
+		{
+			description: "Length of map",
+			text:        `${length("${map("foo", "bar")}")}`,
+			expectation: "1",
+		},
+		{
+			description: "Invalid type errors",
+			text:        `${length(4)}`,
+			evalError:   true,
+		},
+	}
+
+	lengthTestFunc := testInterpolationFunc(keyFuncs{
+		"length": interpolationFuncLength,
+		"list":   interpolationFuncList,
+		"map":    interpolationFuncMap,
+	})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			lengthTestFunc(t, tc)
+		})
+	}
+}

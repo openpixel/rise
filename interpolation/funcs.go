@@ -2,6 +2,7 @@ package interpolation
 
 import (
 	"errors"
+	"fmt"
 	"os"
 
 	"github.com/hashicorp/hil/ast"
@@ -23,6 +24,7 @@ var CoreFunctions = map[string]ast.Function{
 	"min":      interpolationFuncMin(),
 	"contains": interpolationFuncContains(),
 	"split":    interpolationFuncSplit(),
+	"length":   interpolationFuncLength(),
 }
 
 // interpolationFuncEnv will extract a variable out of the env
@@ -37,6 +39,29 @@ func interpolationFuncEnv() ast.Function {
 				return "", errors.New("Must provide a variable name")
 			}
 			return os.Getenv(varName), nil
+		},
+	}
+}
+
+// interpolationFuncLength will determine the length of the input
+// if the input is a list, it will count the length of the items
+// if the input is a map, it will count the keys
+// if the input is a string, it will count the characters
+func interpolationFuncLength() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeAny},
+		ReturnType: ast.TypeInt,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			switch input := inputs[0].(type) {
+			case string:
+				return len(input), nil
+			case []ast.Variable:
+				return len(input), nil
+			case map[string]ast.Variable:
+				return len(input), nil
+			default:
+				return nil, fmt.Errorf("Must provide either a list, map or string, got %T", input)
+			}
 		},
 	}
 }

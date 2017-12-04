@@ -2,5 +2,6 @@
     "i": ${i},
     "j": "${join(", ", h)}",
     "other": "${upper("foobar")}",
-    "foo": "${join(" | ", list("foo", "bar"))}"
+    "foo": "${join(" | ", list("foo", "bar"))}",
+    "len": ${length(h)}
 }
