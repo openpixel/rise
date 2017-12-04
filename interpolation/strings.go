@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
 )
 
@@ -50,6 +51,27 @@ func interpolationFuncJoin() ast.Function {
 			}
 
 			return strings.Join(list, inputs[0].(string)), nil
+		},
+	}
+}
+
+// interpolationFuncSplit will split a string into substrings separated by a separator string.
+func interpolationFuncSplit() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeString, ast.TypeString},
+		ReturnType: ast.TypeList,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			var result []ast.Variable
+			val := inputs[0].(string)
+			sep := inputs[1].(string)
+			for _, sub := range strings.Split(val, sep) {
+				nativeVal, err := hil.InterfaceToVariable(sub)
+				if err != nil {
+					return nil, err
+				}
+				result = append(result, nativeVal)
+			}
+			return result, nil
 		},
 	}
 }

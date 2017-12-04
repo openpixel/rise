@@ -22,6 +22,7 @@ var CoreFunctions = map[string]ast.Function{
 	"max":      interpolationFuncMax(),
 	"min":      interpolationFuncMin(),
 	"contains": interpolationFuncContains(),
+	"split":    interpolationFuncSplit(),
 }
 
 // interpolationFuncEnv will extract a variable out of the env

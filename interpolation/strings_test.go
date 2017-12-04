@@ -164,3 +164,26 @@ func TestInterpolationFuncContains(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncSplit(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Splits into list",
+			text:        `${split("foo,bar", ",")}`,
+			expectation: []interface{}{"foo", "bar"},
+		},
+		{
+			description: "Splits even when sep not found",
+			text:        `${split("foo,bar", ":")}`,
+			expectation: []interface{}{"foo,bar"},
+		},
+	}
+
+	splitTestFunc := testInterpolationFunc(keyFuncs{"split": interpolationFuncSplit})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			splitTestFunc(t, tc)
+		})
+	}
+}
