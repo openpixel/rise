@@ -87,3 +87,23 @@ func interpolationFuncKeys() ast.Function {
 		},
 	}
 }
+
+func interpolationFuncMerge() ast.Function {
+	return ast.Function{
+		ArgTypes:     []ast.Type{ast.TypeMap},
+		ReturnType:   ast.TypeMap,
+		Variadic:     true,
+		VariadicType: ast.TypeMap,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			result := make(map[string]ast.Variable)
+
+			for _, input := range inputs {
+				for k, v := range input.(map[string]ast.Variable) {
+					result[k] = v
+				}
+			}
+
+			return result, nil
+		},
+	}
+}

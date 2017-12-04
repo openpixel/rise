@@ -57,7 +57,7 @@ func TestInterpolationFuncMap(t *testing.T) {
 		},
 		{
 			description: "Map with different types",
-			text:        `${map("foo", "bar", "key", "${map("flip", "flop")}")}`,
+			text:        `${map("foo", "bar", "key", map("flip", "flop"))}`,
 			expectation: map[string]interface{}{
 				"foo": "bar",
 				"key": map[string]interface{}{
@@ -110,6 +110,34 @@ func TestInterpolationFuncKeys(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
 			keysTestFunc(t, tc)
+		})
+	}
+}
+
+func TestInterpolationFuncMerge(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Merges two maps",
+			text:        `${merge(map("flip", "flop", "foo", "bar"), map("foo", "override"))}`,
+			expectation: map[string]interface{}{
+				"foo":  "override",
+				"flip": "flop",
+			},
+		},
+		{
+			description: "Single map returns",
+			text:        `${merge(map("foo", "bar"))}`,
+			expectation: map[string]interface{}{
+				"foo": "bar",
+			},
+		},
+	}
+
+	mergeTestFunc := testInterpolationFunc(keyFuncs{"merge": interpolationFuncMerge, "map": interpolationFuncMap})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			mergeTestFunc(t, tc)
 		})
 	}
 }

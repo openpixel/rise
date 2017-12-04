@@ -15,7 +15,7 @@ func TestInterpolationFuncList(t *testing.T) {
 		},
 		{
 			description: "Multi-type list",
-			text:        `${list("foo", "${list("bar")}", "${map("flip", "flop")}")}`,
+			text:        `${list("foo", list("bar"), map("flip", "flop"))}`,
 			expectation: []interface{}{"foo", []interface{}{"bar"}, map[string]interface{}{"flip": "flop"}},
 		},
 		{

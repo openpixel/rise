@@ -142,12 +142,12 @@ func TestInterpolationFuncLength(t *testing.T) {
 		},
 		{
 			description: "Length of list",
-			text:        `${length("${list("foo", "bar")}")}`,
+			text:        `${length(list("foo", "bar"))}`,
 			expectation: "2",
 		},
 		{
 			description: "Length of map",
-			text:        `${length("${map("foo", "bar")}")}`,
+			text:        `${length(map("foo", "bar"))}`,
 			expectation: "1",
 		},
 		{
