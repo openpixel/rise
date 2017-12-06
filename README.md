@@ -3,7 +3,7 @@
 
 # rise
 
-Powerful text interpolation.
+Powerful text interpolation. Documentation can be found here: 
 
 ## Installation
 
@@ -17,10 +17,9 @@ You can find binaries for the latest release on the [releases](https://github.co
 $ go get -u github.com/openpixel/rise
 ```
 
-## Usage
+## Quickstart
 
 ### CLI
-
 You can see the usage documation for the CLI by running `rise --help`.
 
 ```
@@ -37,17 +36,9 @@ Flags:
       --varFile stringSlice   The files that contains the variables to be interpolated
 ```
 
-#### Input (required)
+### Variable Files
 
-The input should be a string that references a file to run the interpolation against.
-
-#### Output (optional)
-
-The output is the location that the interpolated content should be written to. If not set, it will print to stdout.
-
-#### Variable Files (optional)
-
-The variable files should be in hcl compatible formats. See https://github.com/hashicorp/hcl for reference. Rise loads the files in the order they are supplied, so the latest reference of a variable will always be used. For example, if we had two files that looked like this
+The variable files should be in hcl compatible formats. See https://github.com/hashicorp/hcl for reference. Rise loads the files in the order they are supplied, so the latest reference of a variable will always be used. For example, if we had two files that looked like this:
 
 vars.hcl
 ```
@@ -71,31 +62,12 @@ $ rise ... --varFile vars.hcl --varFile vars2.hcl
 
 The value of `i` would be `10`.
 
-#### Basic Example
+### Examples
 
 Look in the [examples](https://github.com/OpenPixel/rise/tree/master/examples) directory for an example, including inheritance:
 
 ```
 $ rise -i ./examples/input.json -o ./examples/output.json --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl
-```
-
-### API
-
-rise can also be used within Go code.
-
-```go
-import "github.com/openpixel/rise/template"
-
-vars := map[string]ast.Variable{}
-
-tmpl, err := template.NewTemplate(vars)
-// handle error
-
-input := `${lower("FOO")}`
-result, err := tmpl.Render(input)
-// handle error
-
-fmt.Printf("Value: %s", result.Value.(string)) // Value: foo
 ```
 
 ## Coming Soon

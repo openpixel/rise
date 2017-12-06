@@ -2,3 +2,5 @@ vendor
 main
 dist
 examples/output.*
+docs/_build
+.DS_Store
