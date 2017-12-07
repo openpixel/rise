@@ -21,7 +21,7 @@ $ go get -u github.com/openpixel/rise
 ## Quickstart
 
 ### CLI
-You can see the usage documation for the CLI by running `rise --help`.
+You can see the usage documentation for the CLI by running `rise --help`.
 
 ```
 $ rise --help
