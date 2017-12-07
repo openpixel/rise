@@ -76,8 +76,8 @@ func interpolationFuncSplit() ast.Function {
 	}
 }
 
-// interpolationFuncReplace replaces the occurences of a value on the provided string with another value.
-// The number of occurences to replace is the last argument to the function.
+// interpolationFuncReplace replaces the occurrences of a value on the provided string with another value.
+// The number of occurrences to replace is the last argument to the function.
 func interpolationFuncReplace() ast.Function {
 	return ast.Function{
 		ArgTypes:   []ast.Type{ast.TypeString, ast.TypeString, ast.TypeString, ast.TypeInt},

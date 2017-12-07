@@ -14,7 +14,7 @@ var varFiles []string
 func init() {
 	RootCmd.PersistentFlags().StringVarP(&inputs, "input", "i", "", "The file to perform interpolation on")
 	RootCmd.PersistentFlags().StringVarP(&outputs, "output", "o", "", "The file to output")
-	RootCmd.PersistentFlags().StringSliceVar(&varFiles, "varFile", []string{}, "The files that contains the variables to be interpolated")
+	RootCmd.PersistentFlags().StringSliceVarP(&varFiles, "vars", "V", []string{}, "The files that contains the variables to be interpolated")
 }
 
 // RootCmd is the root command for the entire cli

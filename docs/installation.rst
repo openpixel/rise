@@ -11,7 +11,7 @@ You can find binaries for the latest release on the `releases <https://github.co
 .. code-block:: sh
 
    $ wget https://github.com/openpixel/rise/releases/download/v0.0.3/rise_0.0.3_linux_amd64.tar.gz
-   $ tar xvf rise_0.0.3_linux_amd64.tar.gz rise -C /usr/local/bin
+   $ tar xvf rise_0.0.3_linux_amd64.tar.gz -C /usr/local/bin rise
    $ which rise
    /usr/local/bin/rise
 

@@ -30,7 +30,7 @@ func (t *Template) buildConfig() *hil.EvalConfig {
 	}
 }
 
-// Render will parse the provided text and interpolate the known variables/funcs
+// Render will parse the provided text and interpolate the known variables/functions
 func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 	tree, err := hil.Parse(text)
 	if err != nil {

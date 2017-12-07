@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/hil/ast"
 )
 
-// CoreFunctions are the custom funtions for interpolation
+// CoreFunctions are the custom functions for interpolation
 var CoreFunctions = map[string]ast.Function{
 	"lower":    interpolationFuncLower(),
 	"upper":    interpolationFuncUpper(),
@@ -36,7 +36,7 @@ func interpolationFuncEnv() ast.Function {
 		Callback: func(inputs []interface{}) (interface{}, error) {
 			varName := inputs[0].(string)
 			if varName == "" {
-				return "", errors.New("Must provide a variable name")
+				return "", errors.New("must provide a variable name")
 			}
 			return os.Getenv(varName), nil
 		},
@@ -60,7 +60,7 @@ func interpolationFuncLength() ast.Function {
 			case map[string]ast.Variable:
 				return len(input), nil
 			default:
-				return nil, fmt.Errorf("Must provide either a list, map or string, got %T", input)
+				return nil, fmt.Errorf("must provide either a list, map or string, got %T", input)
 			}
 		},
 	}

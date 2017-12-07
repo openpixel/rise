@@ -88,6 +88,7 @@ func interpolationFuncKeys() ast.Function {
 	}
 }
 
+// interpolationFuncMerge will merge multiple maps into a single map. Last reference of a key will always win.
 func interpolationFuncMerge() ast.Function {
 	return ast.Function{
 		ArgTypes:     []ast.Type{ast.TypeMap},

@@ -18,7 +18,7 @@ You can see the usage documation for the CLI by running rise --help.
      -h, --help                  help for rise
      -i, --input string          The file to perform interpolation on
      -o, --output string         The file to output
-     --varFile stringSlice   The files that contains the variables to be interpolated
+     -V, --vars stringSlice      The files that contains the variables to be interpolated
 
 Input (required)
 ^^^^^^^^^^^^^^^^
@@ -55,7 +55,7 @@ And ran the following command
 
 .. code-block:: bash
 
-   $ rise ... --varFile vars.hcl --varFile vars2.hcl
+   $ rise ... --vars vars.hcl --vars vars2.hcl
 
 The value of `i` would be `10`.
 
@@ -66,7 +66,7 @@ Look in the `examples <https://github.com/OpenPixel/rise/tree/master/examples>`_
 
 .. code-block:: bash
 
-   $ rise -i ./examples/input.json -o ./examples/output.json --varFile ./examples/vars.hcl --varFile ./examples/vars2.hcl
+   $ rise -i ./examples/input.json -o ./examples/output.json --vars ./examples/vars.hcl --vars ./examples/vars2.hcl
 
 API
 ---
