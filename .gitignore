@@ -4,3 +4,4 @@ dist
 examples/output.*
 docs/_build
 .DS_Store
+.idea
