@@ -1,7 +1,10 @@
 {
-    "i": ${i},
-    "j": "${join(", ", h)}",
-    "other": "${upper("foobar")}",
-    "foo": "${join(" | ", list("foo", "bar"))}",
-    "len": ${length(h)}
+  "i": ${i},
+  "j": "${join(", ", h)}",
+  "other": "${upper("foobar")}",
+  "foo": "${join(" | ", list("foo", "bar"))}",
+  "len": ${length(h)},
+  "list": ${jsonencode(foo)},
+  "map": ${jsonencode(bar)},
+  "string": ${jsonencode(bar["this"])}
 }

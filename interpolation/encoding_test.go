@@ -37,3 +37,40 @@ func TestInterpolationFuncBase64Decode(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncJSONEncode(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "String encoding",
+			text:        `${jsonencode("foo")}`,
+			expectation: `"foo"`,
+		},
+		{
+			description: "List encoding",
+			text:        `${jsonencode(list("foo", "bar"))}`,
+			expectation: `["foo","bar"]`,
+		},
+		{
+			description: "Map encoding",
+			text:        `${jsonencode(map("foo", "bar"))}`,
+			expectation: `{"foo":"bar"}`,
+		},
+		{
+			description: "Nested encoding",
+			text:        `${jsonencode(map("foo", list("this", "that")))}`,
+			expectation: `{"foo":["this","that"]}`,
+		},
+	}
+
+	jsonencodeFunc := testInterpolationFunc(keyFuncs{
+		"jsonencode": interpolationFuncJSONEncode,
+		"list":       interpolationFuncList,
+		"map":        interpolationFuncMap,
+	})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			jsonencodeFunc(t, tc)
+		})
+	}
+}

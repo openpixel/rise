@@ -10,21 +10,22 @@ import (
 
 // CoreFunctions are the custom functions for interpolation
 var CoreFunctions = map[string]ast.Function{
-	"lower":    interpolationFuncLower(),
-	"upper":    interpolationFuncUpper(),
-	"env":      interpolationFuncEnv(),
-	"join":     interpolationFuncJoin(),
-	"has":      interpolationFuncHas(),
-	"map":      interpolationFuncMap(),
-	"keys":     interpolationFuncKeys(),
-	"list":     interpolationFuncList(),
-	"concat":   interpolationFuncConcat(),
-	"replace":  interpolationFuncReplace(),
-	"max":      interpolationFuncMax(),
-	"min":      interpolationFuncMin(),
-	"contains": interpolationFuncContains(),
-	"split":    interpolationFuncSplit(),
-	"length":   interpolationFuncLength(),
+	"lower":      interpolationFuncLower(),
+	"upper":      interpolationFuncUpper(),
+	"env":        interpolationFuncEnv(),
+	"join":       interpolationFuncJoin(),
+	"has":        interpolationFuncHas(),
+	"map":        interpolationFuncMap(),
+	"keys":       interpolationFuncKeys(),
+	"list":       interpolationFuncList(),
+	"concat":     interpolationFuncConcat(),
+	"replace":    interpolationFuncReplace(),
+	"max":        interpolationFuncMax(),
+	"min":        interpolationFuncMin(),
+	"contains":   interpolationFuncContains(),
+	"split":      interpolationFuncSplit(),
+	"length":     interpolationFuncLength(),
+	"jsonencode": interpolationFuncJSONEncode(),
 }
 
 // interpolationFuncEnv will extract a variable out of the env

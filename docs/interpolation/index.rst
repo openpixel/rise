@@ -7,4 +7,6 @@ Interpolation explanation.
    :maxdepth: 1
    :caption: Contents:
 
+   common
+   maps
    strings
