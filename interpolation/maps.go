@@ -108,3 +108,47 @@ func interpolationFuncMerge() ast.Function {
 		},
 	}
 }
+
+// interpolationFuncPick will pick the values of the provided keys, and create a new map
+func interpolationFuncPick() ast.Function {
+	return ast.Function{
+		ArgTypes:     []ast.Type{ast.TypeMap},
+		ReturnType:   ast.TypeMap,
+		Variadic:     true,
+		VariadicType: ast.TypeString,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			inMap := inputs[0].(map[string]ast.Variable)
+			result := make(map[string]ast.Variable)
+
+			for i := 1; i < len(inputs); i++ {
+				key := inputs[i].(string)
+
+				if val, ok := inMap[key]; ok {
+					result[key] = val
+				}
+			}
+
+			return result, nil
+		},
+	}
+}
+
+// interpolationFuncOmit will return a map that has omitted the keys provided
+func interpolationFuncOmit() ast.Function {
+	return ast.Function{
+		ArgTypes:     []ast.Type{ast.TypeMap},
+		ReturnType:   ast.TypeMap,
+		Variadic:     true,
+		VariadicType: ast.TypeString,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			inMap := inputs[0].(map[string]ast.Variable)
+
+			for i := 1; i < len(inputs); i++ {
+				key := inputs[i].(string)
+				delete(inMap, key)
+			}
+
+			return inMap, nil
+		},
+	}
+}

@@ -15,3 +15,14 @@ variable "bar" {
     "this" = "that"
   }
 }
+
+variable "nested" {
+  value = [
+    {
+      "id" = "1"
+    },
+    {
+      "id" = "2"
+    }
+  ]
+}

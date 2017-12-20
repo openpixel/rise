@@ -141,3 +141,49 @@ func TestInterpolationFuncMerge(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncPick(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Picks correctly",
+			text:        `${pick(map("foo", "bar", "this", "that"), "foo")}`,
+			expectation: map[string]interface{}{
+				"foo": "bar",
+			},
+		},
+	}
+
+	pickTestFunc := testInterpolationFunc(keyFuncs{
+		"pick": interpolationFuncPick,
+		"map":  interpolationFuncMap,
+	})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			pickTestFunc(t, tc)
+		})
+	}
+}
+
+func TestInterpolationFuncOmit(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Omit correctly",
+			text:        `${omit(map("foo", "bar", "this", "that"), "foo")}`,
+			expectation: map[string]interface{}{
+				"this": "that",
+			},
+		},
+	}
+
+	pickTestFunc := testInterpolationFunc(keyFuncs{
+		"omit": interpolationFuncOmit,
+		"map":  interpolationFuncMap,
+	})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			pickTestFunc(t, tc)
+		})
+	}
+}
