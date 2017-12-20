@@ -1,4 +1,6 @@
 ---
 ${i}:
-  - ${join(", ", h)}
   - ${join(", ", list("Foo", "Bar"))}
+  - ${i}
+  - ${upper("foobar")}
+  - ${length(h)}
