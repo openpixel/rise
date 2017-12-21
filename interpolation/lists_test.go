@@ -34,7 +34,7 @@ func TestInterpolationFuncList(t *testing.T) {
 	}
 }
 
-func TestInterpoloationFuncConcat(t *testing.T) {
+func TestInterpolationFuncConcat(t *testing.T) {
 	testCases := []functionTestCase{
 		{
 			description: "Two lists combine",
@@ -90,6 +90,35 @@ func TestInterpoloationFuncConcat(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
 			concatTestFunc(t, tc)
+		})
+	}
+}
+
+func TestInterpolationFuncUnique(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Extracts unique values",
+			text:        `${unique(list("1", "2", "1"))}`,
+			expectation: []interface{}{"1", "2"},
+		},
+		{
+			description: "Extract unique complex values",
+			text:        `${unique(list(list("1", "2", "3"), list("1", "2"), list("1", "2", "3")))}`,
+			expectation: []interface{}{
+				[]interface{}{"1", "2", "3"},
+				[]interface{}{"1", "2"},
+			},
+		},
+	}
+
+	uniqueTestFunc := testInterpolationFunc(keyFuncs{
+		"unique": interpolationFuncUnique,
+		"list":   interpolationFuncList,
+	})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			uniqueTestFunc(t, tc)
 		})
 	}
 }

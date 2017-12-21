@@ -3,6 +3,8 @@ package interpolation
 import (
 	"fmt"
 
+	"reflect"
+
 	"github.com/hashicorp/hil/ast"
 )
 
@@ -55,6 +57,32 @@ func interpolationFuncConcat() ast.Function {
 					default:
 						return nil, fmt.Errorf("concat() does not support lists of %s", v.Type.Printable())
 					}
+				}
+			}
+
+			return result, nil
+		},
+	}
+}
+
+// interpolationFuncUnique will extract the unique values and return a list
+func interpolationFuncUnique() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeList},
+		ReturnType: ast.TypeList,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			list := inputs[0].([]ast.Variable)
+			result := make([]ast.Variable, 0, len(list))
+
+			for _, val := range list {
+				exists := false
+				for _, r := range result {
+					if reflect.DeepEqual(val, r) {
+						exists = true
+					}
+				}
+				if !exists {
+					result = append(result, val)
 				}
 			}
 

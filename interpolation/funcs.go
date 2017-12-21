@@ -26,6 +26,9 @@ var CoreFunctions = map[string]ast.Function{
 	"split":      interpolationFuncSplit(),
 	"length":     interpolationFuncLength(),
 	"jsonencode": interpolationFuncJSONEncode(),
+	"pick":       interpolationFuncPick(),
+	"omit":       interpolationFuncOmit(),
+	"unique":     interpolationFuncUnique(),
 }
 
 // interpolationFuncEnv will extract a variable out of the env
