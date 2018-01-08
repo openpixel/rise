@@ -1,4 +1,4 @@
-package variables
+package config
 
 import (
 	"io/ioutil"
@@ -12,19 +12,28 @@ import (
 // Config is a variable file config definition
 type Config struct {
 	Variables []VariableConfig `hcl:"variable"`
+	Templates []TemplateConfig `hcl:"template"`
 }
 
-// VariableConfig defines the structure for our variable config files
+// VariableConfig defines the structure for our variable config sections
 type VariableConfig struct {
 	Name  string      `hcl:",key"`
 	Value interface{} `hcl:"value"`
 }
 
-// LoadVariableFiles will load all variables files and merge it into a single
+// TemplateConfig defines the structure for our template config sections
+type TemplateConfig struct {
+	Name     string `hcl:",key"`
+	Content  string `hcl:"content"`
+	Filename string `hcl:"file"`
+	Count    int    `hcl:"count"`
+}
+
+// LoadConfigFiles will load all config files and merge it into a single
 // variable map
-func LoadVariableFiles(varFiles []string) (map[string]ast.Variable, error) {
+func LoadConfigFiles(configFiles []string) (map[string]ast.Variable, error) {
 	vars := make(map[string]ast.Variable)
-	for _, file := range varFiles {
+	for _, file := range configFiles {
 		contents, err := ioutil.ReadFile(file)
 		if err != nil {
 			return nil, err

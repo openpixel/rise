@@ -1,4 +1,4 @@
-package variables
+package config
 
 import (
 	"reflect"
@@ -130,7 +130,7 @@ func TestInterpolateVariables(t *testing.T) {
 	}
 }
 
-func TestLoadVariableFiles(t *testing.T) {
+func TestLoadConfigFiles(t *testing.T) {
 	testCases := []struct {
 		description string
 		filenames   []string
@@ -162,7 +162,7 @@ func TestLoadVariableFiles(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
-			res, err := LoadVariableFiles(tc.filenames)
+			res, err := LoadConfigFiles(tc.filenames)
 			if err != nil != tc.error {
 				t.Fatalf("unexpected error: %s", err)
 			}
