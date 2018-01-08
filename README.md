@@ -6,6 +6,8 @@
 
 Powerful text interpolation. Documentation can be found [here](http://risecli.readthedocs.io/en/latest/).
 
+Note: rise is still in development and is subject to breaking changes until we reach our first major release.
+
 ## Installation
 
 ### Binaries
@@ -29,6 +31,11 @@ A powerful text interpolation tool.
 
 Usage:
   rise [flags]
+  rise [command]
+
+Available Commands:
+  help      Help about any command
+  version   Print the version number of rise
 
 Flags:
   -h, --help                  help for rise
