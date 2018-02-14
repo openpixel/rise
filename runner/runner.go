@@ -16,12 +16,12 @@ func Run(inputFile, outputFile *string, configFiles *[]string) error {
 		return err
 	}
 
-	vars, err := config.LoadConfigFiles(*configFiles)
+	configResult, err := config.LoadConfigFiles(*configFiles)
 	if err != nil {
 		return err
 	}
 
-	t, err := template.NewTemplate(vars)
+	t, err := template.NewTemplate(configResult)
 	if err != nil {
 		return err
 	}

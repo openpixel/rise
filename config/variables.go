@@ -23,16 +23,21 @@ type VariableConfig struct {
 
 // TemplateConfig defines the structure for our template config sections
 type TemplateConfig struct {
-	Name     string `hcl:",key"`
-	Content  string `hcl:"content"`
-	Filename string `hcl:"file"`
-	Count    int    `hcl:"count"`
+	Name    string `hcl:",key"`
+	Content string `hcl:"content"`
+	Count   int    `hcl:"count"`
 }
 
-// LoadConfigFiles will load all config files and merge it into a single
-// variable map
-func LoadConfigFiles(configFiles []string) (map[string]ast.Variable, error) {
+// Result is the result of merging multiple config files
+type Result struct {
+	Variables map[string]ast.Variable
+	Templates map[string]string
+}
+
+// LoadConfigFiles will load all config files and merge values into appropriate values
+func LoadConfigFiles(configFiles []string) (*Result, error) {
 	vars := make(map[string]ast.Variable)
+	templates := make(map[string]string)
 	for _, file := range configFiles {
 		contents, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -46,9 +51,18 @@ func LoadConfigFiles(configFiles []string) (map[string]ast.Variable, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		templates, err = prepareTemplates(vars, config)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return vars, nil
+	result := &Result{
+		Variables: vars,
+		Templates: templates,
+	}
+	return result, nil
 }
 
 func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
@@ -76,6 +90,32 @@ func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
 		vars[variable.Name] = astVar
 	}
 	return nil
+}
+
+func prepareTemplates(vars map[string]ast.Variable, config *Config) (map[string]string, error) {
+	templates := make(map[string]string)
+	evalConfig := &hil.EvalConfig{
+		GlobalScope: &ast.BasicScope{
+			FuncMap: interpolation.CoreFunctions,
+			VarMap:  vars,
+		},
+	}
+
+	for _, template := range config.Templates {
+		tree, err := hil.Parse(template.Content)
+		if err != nil {
+			return nil, err
+		}
+
+		result, err := hil.Eval(tree, evalConfig)
+		if err != nil {
+			return nil, err
+		}
+
+		templates[template.Name] = result.Value.(string)
+	}
+
+	return templates, nil
 }
 
 // parseConfig will parse the text into variable definitions

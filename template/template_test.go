@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/hil/ast"
+	"github.com/openpixel/rise/config"
 )
 
 func TestTemplate_Render(t *testing.T) {
@@ -19,7 +20,11 @@ func TestTemplate_Render(t *testing.T) {
 				},
 			},
 		}
-		tmpl, err := NewTemplate(vars)
+		config := &config.Result{
+			Variables: vars,
+			Templates: map[string]string{},
+		}
+		tmpl, err := NewTemplate(config)
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
@@ -35,7 +40,10 @@ func TestTemplate_Render(t *testing.T) {
 	})
 
 	t.Run("Test render with nil variables", func(t *testing.T) {
-		tmpl, err := NewTemplate(nil)
+		tmpl, err := NewTemplate(&config.Result{
+			Variables: nil,
+			Templates: nil,
+		})
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}

@@ -26,3 +26,7 @@ variable "nested" {
     }
   ]
 }
+
+template "thing1" {
+  content = "this is a template"
+}

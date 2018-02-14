@@ -134,28 +134,31 @@ func TestLoadConfigFiles(t *testing.T) {
 	testCases := []struct {
 		description string
 		filenames   []string
-		result      map[string]ast.Variable
+		result      *Result
 		error       bool
 	}{
 		{
 			"Variable file inheritance",
 			[]string{"testdata/var1.hcl", "testdata/var2.hcl"},
-			map[string]ast.Variable{
-				"i": ast.Variable{
-					Value: "6",
-					Type:  ast.TypeString,
+			&Result{
+				Variables: map[string]ast.Variable{
+					"i": ast.Variable{
+						Value: "6",
+						Type:  ast.TypeString,
+					},
+					"j": ast.Variable{
+						Value: "2",
+						Type:  ast.TypeString,
+					},
 				},
-				"j": ast.Variable{
-					Value: "2",
-					Type:  ast.TypeString,
-				},
+				Templates: map[string]string{},
 			},
 			false,
 		},
 		{
 			"Bad file should error",
 			[]string{"bad"},
-			map[string]ast.Variable(nil),
+			nil,
 			true,
 		},
 	}

@@ -3,21 +3,21 @@ package template
 import (
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
+	"github.com/openpixel/rise/config"
 	"github.com/openpixel/rise/interpolation"
 )
 
 // Template is a container for holding onto the ast Variables
 type Template struct {
-	vars map[string]ast.Variable
+	vars      map[string]ast.Variable
+	templates map[string]string
 }
 
 // NewTemplate will prepare a template object for use
-func NewTemplate(vars map[string]ast.Variable) (*Template, error) {
-	if vars == nil {
-		vars = make(map[string]ast.Variable)
-	}
+func NewTemplate(configResult *config.Result) (*Template, error) {
 	return &Template{
-		vars: vars,
+		vars:      configResult.Variables,
+		templates: configResult.Templates,
 	}, nil
 }
 
