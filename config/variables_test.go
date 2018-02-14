@@ -151,7 +151,9 @@ func TestLoadConfigFiles(t *testing.T) {
 						Type:  ast.TypeString,
 					},
 				},
-				Templates: map[string]string{},
+				Templates: map[string]string{
+					"basic": "this is a template",
+				},
 			},
 			false,
 		},
