@@ -124,7 +124,7 @@ func TestInterpolateVariables(t *testing.T) {
 				t.Fatalf("unexpected error: %s", err)
 			}
 			if !reflect.DeepEqual(vars, tc.result) {
-				t.Fatalf("wrong result\ngiven %s\ngot: %#v\nwant: %#v", config, vars, tc.result)
+				t.Fatalf("wrong result\ngiven %#v\ngot: %#v\nwant: %#v", config, vars, tc.result)
 			}
 		})
 	}
