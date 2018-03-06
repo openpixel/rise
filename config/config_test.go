@@ -93,23 +93,12 @@ func TestInterpolateVariables(t *testing.T) {
 				},
 			},
 			map[string]ast.Variable{
-				"foo": ast.Variable{
-					Value: "bar",
+				"var.foo": ast.Variable{
+					Value: "${lower(\"BAR\")}",
 					Type:  ast.TypeString,
 				},
 			},
 			false,
-		},
-		{
-			"Invalid interpolation should error",
-			[]VariableConfig{
-				{
-					Name:  "foo",
-					Value: `${lower(a, b)}`,
-				},
-			},
-			map[string]ast.Variable{},
-			true,
 		},
 	}
 
@@ -142,17 +131,20 @@ func TestLoadConfigFiles(t *testing.T) {
 			[]string{"testdata/var1.hcl", "testdata/var2.hcl"},
 			&Result{
 				Variables: map[string]ast.Variable{
-					"i": ast.Variable{
+					"var.i": ast.Variable{
 						Value: "6",
 						Type:  ast.TypeString,
 					},
-					"j": ast.Variable{
+					"var.j": ast.Variable{
 						Value: "2",
 						Type:  ast.TypeString,
 					},
 				},
-				Templates: map[string]string{
-					"basic": "this is a template",
+				Templates: map[string]ast.Variable{
+					"tmpl.basic": ast.Variable{
+						Value: "this is a template",
+						Type:  ast.TypeString,
+					},
 				},
 			},
 			false,

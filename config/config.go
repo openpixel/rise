@@ -1,12 +1,12 @@
 package config
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
-	"github.com/openpixel/rise/interpolation"
 )
 
 // Config is a variable file config definition
@@ -31,13 +31,13 @@ type TemplateConfig struct {
 // Result is the result of merging multiple config files
 type Result struct {
 	Variables map[string]ast.Variable
-	Templates map[string]string
+	Templates map[string]ast.Variable
 }
 
 // LoadConfigFiles will load all config files and merge values into appropriate values
 func LoadConfigFiles(configFiles []string) (*Result, error) {
 	vars := make(map[string]ast.Variable)
-	templates := make(map[string]string)
+	templates := make(map[string]ast.Variable)
 	for _, file := range configFiles {
 		contents, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -67,54 +67,27 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 
 func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
 	for _, variable := range config.Variables {
-		err := hil.Walk(&variable.Value, func(data *hil.WalkData) error {
-			result, err := hil.Eval(data.Root, &hil.EvalConfig{
-				GlobalScope: &ast.BasicScope{
-					FuncMap: interpolation.CoreFunctions,
-				},
-			})
-			if err != nil {
-				return err
-			}
-			data.Replace = true
-			data.ReplaceValue = result.Value.(string)
-			return nil
-		})
-		if err != nil {
-			return err
-		}
 		astVar, err := hil.InterfaceToVariable(variable.Value)
 		if err != nil {
 			return err
 		}
-		vars[variable.Name] = astVar
+		vars[fmt.Sprintf("var.%s", variable.Name)] = astVar
 	}
 	return nil
 }
 
-func prepareTemplates(vars map[string]ast.Variable, config *Config) (map[string]string, error) {
-	templates := make(map[string]string)
-	evalConfig := &hil.EvalConfig{
-		GlobalScope: &ast.BasicScope{
-			FuncMap: interpolation.CoreFunctions,
-			VarMap:  vars,
-		},
-	}
-
+func prepareTemplates(vars map[string]ast.Variable, config *Config) (map[string]ast.Variable, error) {
+	templates := make(map[string]ast.Variable)
 	for _, template := range config.Templates {
-		tree, err := hil.Parse(template.Content)
+		astVar, err := hil.InterfaceToVariable(template.Content)
 		if err != nil {
 			return nil, err
 		}
-
-		result, err := hil.Eval(tree, evalConfig)
-		if err != nil {
-			return nil, err
+		if astVar.Type != ast.TypeString {
+			return nil, fmt.Errorf("template %s content must be a string", template.Name)
 		}
-
-		templates[template.Name] = result.Value.(string)
+		templates[fmt.Sprintf("tmpl.%s", template.Name)] = astVar
 	}
-
 	return templates, nil
 }
 

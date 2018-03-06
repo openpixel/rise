@@ -6,5 +6,6 @@
   "len": ${length(var.h)},
   "list": ${jsonencode(var.foo)},
   "map": ${jsonencode(var.bar)},
-  "string": ${jsonencode(var.bar["this"])}
+  "string": ${jsonencode(var.bar["this"])},
+  "tmpl1": "${tmpl.thing1}"
 }
