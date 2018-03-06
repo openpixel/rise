@@ -71,9 +71,7 @@ func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 
 type visitorFn struct {
 	resultErr error
-
-	config *hil.EvalConfig
-
+	config    *hil.EvalConfig
 	templates map[string]ast.Variable
 }
 
@@ -81,37 +79,44 @@ func (vf visitorFn) fn(n ast.Node) ast.Node {
 	if vf.resultErr != nil {
 		return n
 	}
-
-	var varName string
 	switch vn := n.(type) {
 	case *ast.VariableAccess:
-		varName = vn.Name
+		// Found a variable reference that needs to be processed
+		n = vf.processVariable(vn)
 	case *ast.Index:
+		// We found an index reference. In this case we need to check
+		// both the target and key for VariableAccess usage.
 		if va, ok := vn.Target.(*ast.VariableAccess); ok {
-			varName = va.Name
+			vn.Target = vf.processVariable(va)
 		}
 		if va, ok := vn.Key.(*ast.VariableAccess); ok {
-			varName = va.Name
+			vn.Key = vf.processVariable(va)
 		}
 	default:
 		return n
 	}
+	return n
+}
 
-	// When the variable accessor is to a template, processing needs to occur
-	if strings.HasPrefix(varName, "tmpl.") {
-		resultN, err := processTemplateNode(n, vf.templates[varName], vf.config)
+func (vf visitorFn) processVariable(va *ast.VariableAccess) ast.Node {
+	name := va.Name
+	// When the variable accessor is a template, we need to process it
+	if strings.HasPrefix(name, "tmpl.") {
+		resultN, err := vf.processTemplateNode(va, name)
 		if err != nil {
 			vf.resultErr = err
-			return n
+			return va
 		}
 		resultN = vf.fn(resultN)
 		return resultN
 	}
 
-	return n
+	return va
 }
 
-func processTemplateNode(original ast.Node, template ast.Variable, config *hil.EvalConfig) (replacement ast.Node, err error) {
+func (vf visitorFn) processTemplateNode(original ast.Node, name string) (replacement ast.Node, err error) {
+	template := vf.templates[name]
+
 	switch template.Type {
 	case ast.TypeString:
 		var root ast.Node
@@ -121,7 +126,7 @@ func processTemplateNode(original ast.Node, template ast.Variable, config *hil.E
 		if err != nil {
 			break
 		}
-		newValue, err = hil.Eval(root, config)
+		newValue, err = hil.Eval(root, vf.config)
 		if err != nil {
 			break
 		}
