@@ -52,7 +52,7 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 			return nil, err
 		}
 
-		templates, err = prepareTemplates(vars, config)
+		templates, err = prepareTemplates(templates, config)
 		if err != nil {
 			return nil, err
 		}
