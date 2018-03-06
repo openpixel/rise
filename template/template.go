@@ -52,42 +52,12 @@ func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 		return hil.InvalidResult, err
 	}
 
-	fn := func(n ast.Node) ast.Node {
-		if resultErr != nil {
-			return n
-		}
-
-		var varName string
-
-		switch vn := n.(type) {
-		case *ast.VariableAccess:
-			varName = vn.Name
-		case *ast.Index:
-			if va, ok := vn.Target.(*ast.VariableAccess); ok {
-				varName = va.Name
-			}
-			if va, ok := vn.Key.(*ast.VariableAccess); ok {
-				varName = va.Name
-			}
-		default:
-			return n
-		}
-
-		if strings.HasPrefix(varName, "tmpl.") {
-			resultN, err := processTemplateNode(n, t.templates[varName], config)
-			if err != nil {
-				resultErr = err
-				return n
-			}
-			return resultN
-		}
-
-		return n
+	vf := visitorFn{
+		config:    config,
+		templates: t.templates,
 	}
-
-	tree.Accept(fn)
-
-	if resultErr != nil {
+	tree = tree.Accept(vf.fn)
+	if vf.resultErr != nil {
 		return hil.InvalidResult, resultErr
 	}
 
@@ -99,7 +69,49 @@ func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 	return result, nil
 }
 
-func processTemplateNode(original ast.Node, template ast.Variable, config *hil.EvalConfig) (new ast.Node, err error) {
+type visitorFn struct {
+	resultErr error
+
+	config *hil.EvalConfig
+
+	templates map[string]ast.Variable
+}
+
+func (vf visitorFn) fn(n ast.Node) ast.Node {
+	if vf.resultErr != nil {
+		return n
+	}
+
+	var varName string
+	switch vn := n.(type) {
+	case *ast.VariableAccess:
+		varName = vn.Name
+	case *ast.Index:
+		if va, ok := vn.Target.(*ast.VariableAccess); ok {
+			varName = va.Name
+		}
+		if va, ok := vn.Key.(*ast.VariableAccess); ok {
+			varName = va.Name
+		}
+	default:
+		return n
+	}
+
+	// When the variable accessor is to a template, processing needs to occur
+	if strings.HasPrefix(varName, "tmpl.") {
+		resultN, err := processTemplateNode(n, vf.templates[varName], vf.config)
+		if err != nil {
+			vf.resultErr = err
+			return n
+		}
+		resultN = vf.fn(resultN)
+		return resultN
+	}
+
+	return n
+}
+
+func processTemplateNode(original ast.Node, template ast.Variable, config *hil.EvalConfig) (replacement ast.Node, err error) {
 	switch template.Type {
 	case ast.TypeString:
 		var root ast.Node
@@ -113,11 +125,11 @@ func processTemplateNode(original ast.Node, template ast.Variable, config *hil.E
 		if err != nil {
 			break
 		}
-		new, err = hil.ParseWithPosition(newValue.Value.(string), original.Pos())
+		replacement, err = hil.ParseWithPosition(newValue.Value.(string), original.Pos())
 		if err != nil {
 			break
 		}
-		return new, nil
+		return replacement, nil
 	}
 
 	return original, err
