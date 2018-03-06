@@ -47,7 +47,7 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = interpolateVariables(vars, config)
+		err = prepareVariables(vars, config)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +65,7 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 	return result, nil
 }
 
-func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
+func prepareVariables(vars map[string]ast.Variable, config *Config) error {
 	for _, variable := range config.Variables {
 		astVar, err := hil.InterfaceToVariable(variable.Value)
 		if err != nil {

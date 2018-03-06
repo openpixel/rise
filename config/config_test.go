@@ -77,7 +77,7 @@ func TestParseConfig(t *testing.T) {
 	}
 }
 
-func TestInterpolateVariables(t *testing.T) {
+func TestPrepareVariables(t *testing.T) {
 	testCases := []struct {
 		description string
 		config      []VariableConfig
@@ -108,7 +108,7 @@ func TestInterpolateVariables(t *testing.T) {
 			config := &Config{
 				Variables: tc.config,
 			}
-			err := interpolateVariables(vars, config)
+			err := prepareVariables(vars, config)
 			if err != nil != tc.error {
 				t.Fatalf("unexpected error: %s", err)
 			}
