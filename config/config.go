@@ -76,8 +76,7 @@ func interpolateVariables(vars map[string]ast.Variable, config *Config) error {
 	return nil
 }
 
-func prepareTemplates(vars map[string]ast.Variable, config *Config) (map[string]ast.Variable, error) {
-	templates := make(map[string]ast.Variable)
+func prepareTemplates(templates map[string]ast.Variable, config *Config) (map[string]ast.Variable, error) {
 	for _, template := range config.Templates {
 		astVar, err := hil.InterfaceToVariable(template.Content)
 		if err != nil {

@@ -28,5 +28,5 @@ variable "nested" {
 }
 
 template "thing1" {
-  content = "the value of j is ${j}"
+  content = "the value of j is ${var.j}"
 }
