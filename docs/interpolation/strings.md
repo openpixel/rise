@@ -35,25 +35,6 @@ ${upper("foo")} // FOO
 
 ---
 
-## join
-
-### Parameters
-
-* *sep* - `string` - The separator between each value
-* *values* - `list` - The list of values to join
-
-### Returns
-
-* `string` - The values joined by sep
-
-### Examples
-
-```dart
-${join(",", ["foo", "bar"])} // "foo,bar"
-```
-
----
-
 ## split
 
 ### Parameters

@@ -8,6 +8,9 @@
 
 ## Interpolation
 
+* [encoding](interpolation/encoding.md)
 * [helpers](interpolation/helpers.md)
+* [lists](interpolation/lists.md)
 * [maps](interpolation/maps.md)
+* [math](interpolation/math.md)
 * [strings](interpolation/strings.md)
