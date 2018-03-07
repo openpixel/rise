@@ -8,7 +8,7 @@ There are multiple ways that rise can be installed.
 
 ### Binaries
 
-You can find binaries for the latest release on the `releases <https://github.com/openpixel/rise/releases>`_ page. For example, to install on linux:
+You can find binaries for the latest release on the [releases](https://github.com/openpixel/rise/releases) page. For example, to install on linux:
 
 ```
 $ export RISE_VERSION=X.X.X

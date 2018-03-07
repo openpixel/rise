@@ -1,4 +1,6 @@
 # Table of Contents
 
-* [Read Me](../README.md)
 * [Interpolation Functions](interpolation/README.md)
+  * [helpers](interpolation/helpers.md)
+  * [maps](interpolation/maps.md)
+  * [lists](interpolation/lists.md)
