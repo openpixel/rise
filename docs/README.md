@@ -12,8 +12,8 @@ You can find binaries for the latest release on the [releases](https://github.co
 
 ```
 $ export RISE_VERSION=X.X.X
-$ wget https://github.com/openpixel/rise/releases/download/v$RISE_VERSION/rise_$RISE_VERSION_linux_amd64.tar.gz
-$ tar xvf rise_$RISE_VERSION_linux_amd64.tar.gz -C /usr/local/bin rise
+$ wget https://github.com/openpixel/rise/releases/download/v${RISE_VERSION}/rise_${RISE_VERSION}_linux_amd64.tar.gz
+$ tar xvf rise_${RISE_VERSION}_linux_amd64.tar.gz -C /usr/local/bin rise
 $ which rise
 /usr/local/bin/rise
 ```
