@@ -20,3 +20,4 @@ install:
   - dep ensure
 script:
   - go test -race -v ./...
+  - ./coveralls.sh
