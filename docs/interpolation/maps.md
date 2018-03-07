@@ -13,8 +13,8 @@
 
 ### Examples
 
-```
-has({"foo": "bar"}, "foo") // true
+```dart
+${has({"foo": "bar"}, "foo")} // true
 ```
 
 ---
@@ -31,9 +31,9 @@ has({"foo": "bar"}, "foo") // true
 
 ### Examples
 
-```
-map("foo", "bar") // {"foo": "bar"}
-map("foo", list(1, 2, 3), "bar", list(3, 2, 1)) // {"foo": [1, 2, 3], "bar": [3, 2, 1]}
+```dart
+${map("foo", "bar")} // {"foo": "bar"}
+${map("foo", list(1, 2, 3), "bar", list(3, 2, 1))} // {"foo": [1, 2, 3], "bar": [3, 2, 1]}
 ```
 
 ---
@@ -50,8 +50,8 @@ map("foo", list(1, 2, 3), "bar", list(3, 2, 1)) // {"foo": [1, 2, 3], "bar": [3,
 
 ### Examples
 
-```
-keys(map("foo", "bar")) // ["foo"]
+```dart
+${keys(map("foo", "bar"))} // ["foo"]
 ```
 
 ---
@@ -67,6 +67,6 @@ keys(map("foo", "bar")) // ["foo"]
 
 ### Examples
 
-```
-merge(map("foo", "bar"), map("foo", "bar2", "hello", "there")) // {"foo": "bar2", "hello": "there"}
+```dart
+${merge(map("foo", "bar"), map("foo", "bar2", "hello", "there"))} // {"foo": "bar2", "hello": "there"}
 ```

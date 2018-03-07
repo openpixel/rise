@@ -4,7 +4,7 @@
 
 # rise
 
-Powerful text interpolation. Documentation can be found [here](http://risecli.readthedocs.io/en/latest/).
+Powerful text interpolation. Documentation can be found [here](https://openpixel.gitbooks.io/rise).
 
 Note: rise is still in development and is subject to breaking changes until we reach our first major release.
 

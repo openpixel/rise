@@ -12,8 +12,8 @@
 
 ### Examples
 
-```
-lower("FOO") // foo
+```dart
+${lower("FOO")} // foo
 ```
 
 ---
@@ -29,8 +29,8 @@ lower("FOO") // foo
 
 ### Examples
 
-```
-upper("foo") // FOO
+```dart
+${upper("foo")} // FOO
 ```
 
 ---
@@ -48,8 +48,8 @@ upper("foo") // FOO
 
 ### Examples
 
-```
-join(",", ["foo", "bar"]) // "foo,bar"
+```dart
+${join(",", ["foo", "bar"])} // "foo,bar"
 ```
 
 ---
@@ -67,8 +67,8 @@ join(",", ["foo", "bar"]) // "foo,bar"
 
 ### Examples
 
-```
-split("foo,bar", ",") // ["foo", "bar"]
+```dart
+${split("foo,bar", ",")} // ["foo", "bar"]
 ```
 
 ---
@@ -88,8 +88,8 @@ split("foo,bar", ",") // ["foo", "bar"]
 
 ### Examples
 
-```
-replace("!!!hello!!!", "!", "", -1) // "hello"
+```dart
+${replace("!!!hello!!!", "!", "", -1)} // "hello"
 ```
 
 ---
@@ -107,6 +107,6 @@ replace("!!!hello!!!", "!", "", -1) // "hello"
 
 ### Examples
 
-```
-contains("foo bar", "foo") // true
+```dart
+${contains("foo bar", "foo")} // true
 ```
