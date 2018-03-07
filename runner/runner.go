@@ -5,23 +5,23 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/openpixel/rise/config"
 	"github.com/openpixel/rise/template"
-	"github.com/openpixel/rise/variables"
 )
 
 // Run will run
-func Run(inputFile, outputFile *string, varFiles *[]string) error {
+func Run(inputFile, outputFile *string, configFiles *[]string) error {
 	contents, err := ioutil.ReadFile(*inputFile)
 	if err != nil {
 		return err
 	}
 
-	vars, err := variables.LoadVariableFiles(*varFiles)
+	configResult, err := config.LoadConfigFiles(*configFiles)
 	if err != nil {
 		return err
 	}
 
-	t, err := template.NewTemplate(vars)
+	t, err := template.NewTemplate(configResult)
 	if err != nil {
 		return err
 	}

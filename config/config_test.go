@@ -1,4 +1,4 @@
-package variables
+package config
 
 import (
 	"reflect"
@@ -77,7 +77,7 @@ func TestParseConfig(t *testing.T) {
 	}
 }
 
-func TestInterpolateVariables(t *testing.T) {
+func TestPrepareVariables(t *testing.T) {
 	testCases := []struct {
 		description string
 		config      []VariableConfig
@@ -93,23 +93,12 @@ func TestInterpolateVariables(t *testing.T) {
 				},
 			},
 			map[string]ast.Variable{
-				"foo": ast.Variable{
-					Value: "bar",
+				"var.foo": ast.Variable{
+					Value: "${lower(\"BAR\")}",
 					Type:  ast.TypeString,
 				},
 			},
 			false,
-		},
-		{
-			"Invalid interpolation should error",
-			[]VariableConfig{
-				{
-					Name:  "foo",
-					Value: `${lower(a, b)}`,
-				},
-			},
-			map[string]ast.Variable{},
-			true,
 		},
 	}
 
@@ -119,35 +108,62 @@ func TestInterpolateVariables(t *testing.T) {
 			config := &Config{
 				Variables: tc.config,
 			}
-			err := interpolateVariables(vars, config)
+			err := prepareVariables(vars, config)
 			if err != nil != tc.error {
 				t.Fatalf("unexpected error: %s", err)
 			}
 			if !reflect.DeepEqual(vars, tc.result) {
-				t.Fatalf("wrong result\ngiven %s\ngot: %#v\nwant: %#v", config, vars, tc.result)
+				t.Fatalf("wrong result\ngiven %#v\ngot: %#v\nwant: %#v", config, vars, tc.result)
 			}
 		})
 	}
 }
 
-func TestLoadVariableFiles(t *testing.T) {
+func TestLoadConfigFiles(t *testing.T) {
 	testCases := []struct {
 		description string
 		filenames   []string
-		result      map[string]ast.Variable
+		result      *Result
 		error       bool
 	}{
 		{
-			"Variable file inheritance",
+			"Config file inheritance",
 			[]string{"testdata/var1.hcl", "testdata/var2.hcl"},
-			map[string]ast.Variable{
-				"i": ast.Variable{
-					Value: "6",
-					Type:  ast.TypeString,
+			&Result{
+				Variables: map[string]ast.Variable{
+					"var.i": ast.Variable{
+						Value: "6",
+						Type:  ast.TypeString,
+					},
+					"var.j": ast.Variable{
+						Value: "2",
+						Type:  ast.TypeString,
+					},
 				},
-				"j": ast.Variable{
-					Value: "2",
-					Type:  ast.TypeString,
+				Templates: map[string]ast.Variable{
+					"tmpl.basic": ast.Variable{
+						Value: "this is a template",
+						Type:  ast.TypeString,
+					},
+				},
+			},
+			false,
+		},
+		{
+			"Config with file template",
+			[]string{"testdata/var3.hcl"},
+			&Result{
+				Variables: map[string]ast.Variable{
+					"var.j": ast.Variable{
+						Value: "world",
+						Type:  ast.TypeString,
+					},
+				},
+				Templates: map[string]ast.Variable{
+					"tmpl.advanced": ast.Variable{
+						Value: "hello, ${var.j}",
+						Type:  ast.TypeString,
+					},
 				},
 			},
 			false,
@@ -155,14 +171,14 @@ func TestLoadVariableFiles(t *testing.T) {
 		{
 			"Bad file should error",
 			[]string{"bad"},
-			map[string]ast.Variable(nil),
+			nil,
 			true,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
-			res, err := LoadVariableFiles(tc.filenames)
+			res, err := LoadConfigFiles(tc.filenames)
 			if err != nil != tc.error {
 				t.Fatalf("unexpected error: %s", err)
 			}

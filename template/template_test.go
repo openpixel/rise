@@ -4,12 +4,13 @@ import (
 	"testing"
 
 	"github.com/hashicorp/hil/ast"
+	"github.com/openpixel/rise/config"
 )
 
 func TestTemplate_Render(t *testing.T) {
 	t.Run("Test render with variable passed", func(t *testing.T) {
 		vars := map[string]ast.Variable{
-			"foo": ast.Variable{
+			"var.foo": ast.Variable{
 				Type: ast.TypeMap,
 				Value: map[string]ast.Variable{
 					"bar": ast.Variable{
@@ -19,12 +20,16 @@ func TestTemplate_Render(t *testing.T) {
 				},
 			},
 		}
-		tmpl, err := NewTemplate(vars)
+		config := &config.Result{
+			Variables: vars,
+			Templates: map[string]ast.Variable{},
+		}
+		tmpl, err := NewTemplate(config)
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		result, err := tmpl.Render(`${has(foo, "bar")}`)
+		result, err := tmpl.Render(`${has(var.foo, "bar")}`)
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
@@ -34,8 +39,37 @@ func TestTemplate_Render(t *testing.T) {
 		}
 	})
 
+	t.Run("Test render with template", func(t *testing.T) {
+		tmpls := map[string]ast.Variable{
+			"tmpl.foo": ast.Variable{
+				Type:  ast.TypeString,
+				Value: "This is a template ${lower(\"FOO\")}",
+			},
+		}
+		config := &config.Result{
+			Variables: map[string]ast.Variable{},
+			Templates: tmpls,
+		}
+		tmpl, err := NewTemplate(config)
+		if err != nil {
+			t.Fatalf("Unexpected err: %s", err)
+		}
+
+		result, err := tmpl.Render(`${tmpl.foo}`)
+		if err != nil {
+			t.Fatalf("Unexpected err: %s", err)
+		}
+
+		if result.Value.(string) != "This is a template foo" {
+			t.Fatalf("Unexpected result: Expected %s, got %s", "This is a template foo", result.Value.(string))
+		}
+	})
+
 	t.Run("Test render with nil variables", func(t *testing.T) {
-		tmpl, err := NewTemplate(nil)
+		tmpl, err := NewTemplate(&config.Result{
+			Variables: nil,
+			Templates: nil,
+		})
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}

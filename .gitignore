@@ -5,3 +5,5 @@ examples/output.*
 docs/_build
 .DS_Store
 .idea
+_book
+node_modules

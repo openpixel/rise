@@ -1,10 +1,12 @@
 {
-  "i": ${i},
-  "j": "${join(", ", h)}",
+  "i": ${var.i},
+  "j": "${join(", ", var.h)}",
   "other": "${upper("foobar")}",
   "foo": "${join(" | ", list("foo", "bar"))}",
-  "len": ${length(h)},
-  "list": ${jsonencode(foo)},
-  "map": ${jsonencode(bar)},
-  "string": ${jsonencode(bar["this"])}
+  "len": ${length(var.h)},
+  "list": ${jsonencode(var.foo)},
+  "map": ${jsonencode(var.bar)},
+  "string": ${jsonencode(var.bar["this"])},
+  "tmpl1": "${tmpl.thing1}",
+  "filetemplate": "${tmpl.filetemplate}"
 }

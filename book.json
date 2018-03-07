@@ -1,0 +1,11 @@
+{
+  "root": "./docs",
+  "plugins": ["-highlight", "prism", "prism-themes"],
+  "pluginsConfig": {
+    "prism": {
+      "css": [
+        "prism-themes/themes/prism-atom-dark.css"
+      ]
+    }
+  }
+}

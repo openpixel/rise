@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"log"
 	"fmt"
+	"log"
 
 	"github.com/openpixel/rise/runner"
 	"github.com/spf13/cobra"
@@ -12,12 +12,12 @@ const version = "v0.0.6"
 
 var inputs string
 var outputs string
-var varFiles []string
+var configFiles []string
 
 func init() {
 	RootCmd.PersistentFlags().StringVarP(&inputs, "input", "i", "", "The file to perform interpolation on")
 	RootCmd.PersistentFlags().StringVarP(&outputs, "output", "o", "", "The file to output")
-	RootCmd.PersistentFlags().StringSliceVarP(&varFiles, "vars", "V", []string{}, "The files that contains the variables to be interpolated")
+	RootCmd.PersistentFlags().StringSliceVarP(&configFiles, "config", "c", []string{}, "The files that define the configuration to use for interpolation")
 	RootCmd.AddCommand(versionCmd)
 }
 
@@ -30,7 +30,7 @@ var RootCmd = &cobra.Command{
 		if inputs == "" {
 			log.Fatal("Must have an input")
 		}
-		err := runner.Run(&inputs, &outputs, &varFiles)
+		err := runner.Run(&inputs, &outputs, &configFiles)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -38,7 +38,7 @@ var RootCmd = &cobra.Command{
 }
 
 var versionCmd = &cobra.Command{
-	Use: "version",
+	Use:   "version",
 	Short: "Print the version number of rise",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(version)

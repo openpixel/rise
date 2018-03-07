@@ -26,3 +26,11 @@ variable "nested" {
     }
   ]
 }
+
+template "thing1" {
+  content = "the value of j is ${var.j}"
+}
+
+template "filetemplate" {
+  file = "./template.txt"
+}
