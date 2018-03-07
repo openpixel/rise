@@ -3,6 +3,8 @@ package config
 import (
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
+	"strings"
 
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hil"
@@ -24,8 +26,9 @@ type VariableConfig struct {
 // TemplateConfig defines the structure for our template config sections
 type TemplateConfig struct {
 	Name    string `hcl:",key"`
-	Content string `hcl:"content"`
-	Count   int    `hcl:"count"`
+	Content string `hcl:"content"` // a string that contains a simple template.
+	File    string `hcl:"file"`    // a reference to a file that is relative to the config file.
+	Trim    bool   `hcl:"trim"`    // when set, trim will declare to the templating to trim the contents of the file
 }
 
 // Result is the result of merging multiple config files
@@ -52,7 +55,7 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 			return nil, err
 		}
 
-		templates, err = prepareTemplates(templates, config)
+		templates, err = prepareTemplates(file, templates, config)
 		if err != nil {
 			return nil, err
 		}
@@ -76,9 +79,25 @@ func prepareVariables(vars map[string]ast.Variable, config *Config) error {
 	return nil
 }
 
-func prepareTemplates(templates map[string]ast.Variable, config *Config) (map[string]ast.Variable, error) {
+func prepareTemplates(baseFilePath string, templates map[string]ast.Variable, config *Config) (map[string]ast.Variable, error) {
 	for _, template := range config.Templates {
-		astVar, err := hil.InterfaceToVariable(template.Content)
+		var astVar ast.Variable
+		var err error
+		if template.File != "" {
+			templateFilePath := filepath.Join(filepath.Dir(baseFilePath), template.File)
+			var fileContents []byte
+			fileContents, err = ioutil.ReadFile(templateFilePath)
+			if err != nil {
+				return nil, err
+			}
+			contents := string(fileContents)
+			if template.Trim {
+				contents = strings.TrimSpace(contents)
+			}
+			astVar, err = hil.InterfaceToVariable(contents)
+		} else {
+			astVar, err = hil.InterfaceToVariable(template.Content)
+		}
 		if err != nil {
 			return nil, err
 		}

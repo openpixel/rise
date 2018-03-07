@@ -127,7 +127,7 @@ func TestLoadConfigFiles(t *testing.T) {
 		error       bool
 	}{
 		{
-			"Variable file inheritance",
+			"Config file inheritance",
 			[]string{"testdata/var1.hcl", "testdata/var2.hcl"},
 			&Result{
 				Variables: map[string]ast.Variable{
@@ -143,6 +143,25 @@ func TestLoadConfigFiles(t *testing.T) {
 				Templates: map[string]ast.Variable{
 					"tmpl.basic": ast.Variable{
 						Value: "this is a template",
+						Type:  ast.TypeString,
+					},
+				},
+			},
+			false,
+		},
+		{
+			"Config with file template",
+			[]string{"testdata/var3.hcl"},
+			&Result{
+				Variables: map[string]ast.Variable{
+					"var.j": ast.Variable{
+						Value: "world",
+						Type:  ast.TypeString,
+					},
+				},
+				Templates: map[string]ast.Variable{
+					"tmpl.advanced": ast.Variable{
+						Value: "hello, ${var.j}",
 						Type:  ast.TypeString,
 					},
 				},

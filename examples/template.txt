@@ -1,0 +1,1 @@
+this is a template file ${join(",", var.foo)}

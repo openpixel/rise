@@ -7,5 +7,6 @@
   "list": ${jsonencode(var.foo)},
   "map": ${jsonencode(var.bar)},
   "string": ${jsonencode(var.bar["this"])},
-  "tmpl1": "${tmpl.thing1}"
+  "tmpl1": "${tmpl.thing1}",
+  "filetemplate": "${tmpl.filetemplate}"
 }
