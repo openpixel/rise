@@ -10,25 +10,39 @@ import (
 
 // CoreFunctions are the custom functions for interpolation
 var CoreFunctions = map[string]ast.Function{
-	"lower":      interpolationFuncLower(),
-	"upper":      interpolationFuncUpper(),
-	"env":        interpolationFuncEnv(),
-	"join":       interpolationFuncJoin(),
-	"has":        interpolationFuncHas(),
-	"map":        interpolationFuncMap(),
-	"keys":       interpolationFuncKeys(),
-	"list":       interpolationFuncList(),
-	"concat":     interpolationFuncConcat(),
-	"replace":    interpolationFuncReplace(),
-	"max":        interpolationFuncMax(),
-	"min":        interpolationFuncMin(),
-	"contains":   interpolationFuncContains(),
-	"split":      interpolationFuncSplit(),
-	"length":     interpolationFuncLength(),
+	// helpers
+	"env":    interpolationFuncEnv(),
+	"length": interpolationFuncLength(),
+
+	// strings
+	"lower":    interpolationFuncLower(),
+	"upper":    interpolationFuncUpper(),
+	"replace":  interpolationFuncReplace(),
+	"contains": interpolationFuncContains(),
+	"split":    interpolationFuncSplit(),
+
+	// maps
+	"has":   interpolationFuncHas(),
+	"map":   interpolationFuncMap(),
+	"keys":  interpolationFuncKeys(),
+	"merge": interpolationFuncMerge(),
+	"pick":  interpolationFuncPick(),
+	"omit":  interpolationFuncOmit(),
+
+	// lists
+	"join":   interpolationFuncJoin(),
+	"list":   interpolationFuncList(),
+	"concat": interpolationFuncConcat(),
+	"unique": interpolationFuncUnique(),
+
+	// math
+	"max": interpolationFuncMax(),
+	"min": interpolationFuncMin(),
+
+	// encoding
 	"jsonencode": interpolationFuncJSONEncode(),
-	"pick":       interpolationFuncPick(),
-	"omit":       interpolationFuncOmit(),
-	"unique":     interpolationFuncUnique(),
+	"base64enc":  interpolationFuncBase64Encode(),
+	"base64dec":  interpolationFuncBase64Decode(),
 }
 
 // interpolationFuncEnv will extract a variable out of the env

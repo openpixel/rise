@@ -122,3 +122,65 @@ func TestInterpolationFuncUnique(t *testing.T) {
 		})
 	}
 }
+
+func TestInterpolationFuncJoin(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Joins multiple values",
+			text:        `${join(",", i)}`,
+			expectation: "Foo,Bar",
+			vars: map[string]ast.Variable{
+				"i": ast.Variable{
+					Type: ast.TypeList,
+					Value: []ast.Variable{
+						{
+							Type:  ast.TypeString,
+							Value: "Foo",
+						},
+						{
+							Type:  ast.TypeString,
+							Value: "Bar",
+						},
+					},
+				},
+			},
+		},
+		{
+			description: "Bad variable length fails",
+			text:        `${join(",")}`,
+			expectation: "",
+			evalError:   true,
+		},
+		{
+			description: "Bad parse",
+			text:        `${join(",", [4]}`,
+			expectation: "",
+			parseError:  true,
+		},
+		{
+			description: "Bad array item",
+			text:        `${join(",", i)}`,
+			expectation: "Foo,Bar",
+			vars: map[string]ast.Variable{
+				"i": ast.Variable{
+					Type: ast.TypeList,
+					Value: []ast.Variable{
+						{
+							Type:  ast.TypeInt,
+							Value: 4,
+						},
+					},
+				},
+			},
+			evalError: true,
+		},
+	}
+
+	joinTestFunc := testInterpolationFunc(keyFuncs{"join": interpolationFuncJoin})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			joinTestFunc(t, tc)
+		})
+	}
+}
