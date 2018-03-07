@@ -38,15 +38,15 @@ Available Commands:
   version   Print the version number of rise
 
 Flags:
+  -c, --config stringSlice    The files that define the configuration to use for interpolation
   -h, --help                  help for rise
   -i, --input string          The file to perform interpolation on
   -o, --output string         The file to output
-  -V, --vars stringSlice      The files that contains the variables to be interpolated
 ```
 
-### Variable Files
+### Config Files
 
-The variable files should be in hcl compatible formats. See https://github.com/hashicorp/hcl for reference. Rise loads the files in the order they are supplied, so the latest reference of a variable will always be used. For example, if we had two files that looked like this:
+The config files should be in hcl compatible formats. See https://github.com/hashicorp/hcl for reference. Rise loads the files using FIFO, meaning the last file to reference a key will take precedence. For example, if we had two files that looked like this:
 
 vars.hcl
 ```
@@ -65,7 +65,7 @@ variable "i" {
 And ran the following command
 
 ```
-$ rise ... --vars vars.hcl --vars vars2.hcl
+$ rise ... --config vars.hcl --config vars2.hcl
 ```
 
 The value of `i` would be `10`.
@@ -75,7 +75,7 @@ The value of `i` would be `10`.
 Look in the [examples](https://github.com/OpenPixel/rise/tree/master/examples) directory for an example, including inheritance:
 
 ```
-$ rise -i ./examples/input.json -o ./examples/output.json --vars ./examples/vars.hcl --vars ./examples/vars2.hcl
+$ rise -i ./examples/input.json -o ./examples/output.json --config ./examples/vars.hcl --config ./examples/vars2.hcl
 ```
 
 ## Coming Soon
