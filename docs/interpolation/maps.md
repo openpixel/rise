@@ -17,6 +17,8 @@
 has({"foo": "bar"}, "foo") // true
 ```
 
+---
+
 ## map
 
 ### Parameters
@@ -34,6 +36,8 @@ map("foo", "bar") // {"foo": "bar"}
 map("foo", list(1, 2, 3), "bar", list(3, 2, 1)) // {"foo": [1, 2, 3], "bar": [3, 2, 1]}
 ```
 
+---
+
 ## keys
 
 ### Parameters
@@ -49,6 +53,8 @@ map("foo", list(1, 2, 3), "bar", list(3, 2, 1)) // {"foo": [1, 2, 3], "bar": [3,
 ```
 keys(map("foo", "bar")) // ["foo"]
 ```
+
+---
 
 ## merge
 

@@ -16,6 +16,8 @@
 lower("FOO") // foo
 ```
 
+---
+
 ## upper
 
 ### Parameters
@@ -30,6 +32,8 @@ lower("FOO") // foo
 ```
 upper("foo") // FOO
 ```
+
+---
 
 ## join
 
@@ -48,6 +52,8 @@ upper("foo") // FOO
 join(",", ["foo", "bar"]) // "foo,bar"
 ```
 
+---
+
 ## split
 
 ### Parameters
@@ -64,6 +70,8 @@ join(",", ["foo", "bar"]) // "foo,bar"
 ```
 split("foo,bar", ",") // ["foo", "bar"]
 ```
+
+---
 
 ## replace
 
@@ -83,6 +91,8 @@ split("foo,bar", ",") // ["foo", "bar"]
 ```
 replace("!!!hello!!!", "!", "", -1) // "hello"
 ```
+
+---
 
 ## contains
 
