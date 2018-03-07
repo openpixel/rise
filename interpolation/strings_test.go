@@ -117,17 +117,17 @@ func TestInterpolationFuncJoin(t *testing.T) {
 func TestInterpolationFuncReplace(t *testing.T) {
 	testCases := []functionTestCase{
 		{
-			description: "Replace N occurences",
+			description: "Replace N occurrences",
 			text:        `${replace("foo bar bar", " bar", "", -1)}`,
 			expectation: "foo",
 		},
 		{
-			description: "Replace 0 occurences",
+			description: "Replace 0 occurrences",
 			text:        `${replace("foo bar bar", " bar", "", 0)}`,
 			expectation: "foo bar bar",
 		},
 		{
-			description: "Replace 1 occurences",
+			description: "Replace 1 occurrences",
 			text:        `${replace("foo bar bar", " bar", "", 1)}`,
 			expectation: "foo bar",
 		},
