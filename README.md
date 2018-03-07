@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/openpixel/rise.svg?branch=master)](https://travis-ci.org/openpixel/rise)
 [![Go Report Card](https://goreportcard.com/badge/github.com/openpixel/rise)](https://goreportcard.com/report/github.com/openpixel/rise)
-[![Docs](https://readthedocs.org/projects/risecli/badge/?version=latest)](https://risecli.readthedocs.io/en/latest/?badge=latest)
+[![GoDoc](https://godoc.org/github.com/openpixel/rise?status.svg)](https://godoc.org/github.com/openpixel/rise)
 
 # rise
 
