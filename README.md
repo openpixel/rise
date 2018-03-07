@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/openpixel/rise.svg?branch=master)](https://travis-ci.org/openpixel/rise)
 [![Go Report Card](https://goreportcard.com/badge/github.com/openpixel/rise)](https://goreportcard.com/report/github.com/openpixel/rise)
 [![GoDoc](https://godoc.org/github.com/openpixel/rise?status.svg)](https://godoc.org/github.com/openpixel/rise)
+[![Coverage Status](https://coveralls.io/repos/github/openpixel/rise/badge.svg?branch=master)](https://coveralls.io/github/openpixel/rise?branch=master)
 
 # rise
 
