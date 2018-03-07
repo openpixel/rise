@@ -17,7 +17,7 @@ You can find binaries for the latest release on the [releases](https://github.co
 
 ### Go toolchain
 
-```
+```bash
 $ go get -u github.com/openpixel/rise
 ```
 
@@ -26,7 +26,7 @@ $ go get -u github.com/openpixel/rise
 ### CLI
 You can see the usage documentation for the CLI by running `rise --help`.
 
-```
+```bash
 $ rise --help
 A powerful text interpolation tool.
 
@@ -50,14 +50,14 @@ Flags:
 The config files should be in hcl compatible formats. See https://github.com/hashicorp/hcl for reference. Rise loads the files using FIFO, meaning the last file to reference a key will take precedence. For example, if we had two files that looked like this:
 
 vars.hcl
-```
+```hcl
 variable "i" {
   value = 6
 }
 ```
 
 vars2.hcl
-```
+```hcl
 variable "i" {
   value = 10
 }
@@ -65,7 +65,7 @@ variable "i" {
 
 And ran the following command
 
-```
+```bash
 $ rise ... --config vars.hcl --config vars2.hcl
 ```
 
@@ -75,7 +75,7 @@ The value of `i` would be `10`.
 
 Look in the [examples](https://github.com/OpenPixel/rise/tree/master/examples) directory for an example, including inheritance:
 
-```
+```bash
 $ rise -i ./examples/input.json -o ./examples/output.json --config ./examples/vars.hcl --config ./examples/vars2.hcl
 ```
 
