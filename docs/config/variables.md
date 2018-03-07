@@ -7,13 +7,13 @@ Configuration files are made up of a number of different structures to assist wi
 The best way to explain the usage of a variable is through an example. In the below example, we will create a simple string variable and show how it is referenced within a file.
 
 The variable in the configuration file:
-```
+```dart
 variable "foo" {
   value = "bar"
 }
 ```
 Would be referenced like so:
-```
+```dart
 ${var.foo}
 ```
 
@@ -24,14 +24,14 @@ There are a number of different data types that can be supplied. Please see the 
 ## Examples
 
 ### Basic String
-```
+```dart
 variable "foo" {
   value = "bar"
 }
 ```
 
 ### Multi-line String
-```
+```dart
 variable "foo" {
   value = <<EOF
   Line 1
@@ -41,14 +41,14 @@ variable "foo" {
 ```
 
 ### Lists
-```
+```dart
 variable "foo" {
   value = ["Thing 1", "Thing 2"]
 }
 ```
 
 ### Maps
-```
+```dart
 variable "foo" {
   value = {
     "name": "John",
@@ -58,7 +58,7 @@ variable "foo" {
 ```
 
 ### Boolean
-```
+```dart
 variable "foo" {
   value = false
 }

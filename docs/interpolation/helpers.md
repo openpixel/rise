@@ -12,8 +12,8 @@
 
 ### Examples
 
-```
-env("FOO") // foo
+```dart
+${env("FOO")} // foo
 ```
 
 ## length
@@ -31,8 +31,8 @@ env("FOO") // foo
 
 ### Examples
 
-```
-length("hello") // 5
-length(["foo", "bar"]) // 2
-length({"foo": "bar"}) // 1
+```dart
+${length("hello")} // 5
+${length(["foo", "bar"])} // 2
+${length({"foo": "bar"})} // 1
 ```
