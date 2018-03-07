@@ -26,9 +26,9 @@ type VariableConfig struct {
 // TemplateConfig defines the structure for our template config sections
 type TemplateConfig struct {
 	Name    string `hcl:",key"`
-	Content string `hcl:"content"` // a string that contains a simple template.
-	File    string `hcl:"file"`    // a reference to a file that is relative to the config file.
-	Trim    bool   `hcl:"trim"`    // when set, trim will declare to the templating to trim the contents of the file
+	Content string `hcl:"content"` // a string that contains a simple template
+	File    string `hcl:"file"`    // a reference to a file that is relative to the config file
+	Trim    bool   `hcl:"trim"`    // declares if whitespace should be trimmed from the file contents
 }
 
 // Result is the result of merging multiple config files
