@@ -38,6 +38,7 @@ var CoreFunctions = map[string]ast.Function{
 	// math
 	"max": interpolationFuncMax(),
 	"min": interpolationFuncMin(),
+	"avg": interpolationFuncAvg(),
 
 	// encoding
 	"jsonencode": interpolationFuncJSONEncode(),

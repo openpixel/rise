@@ -114,6 +114,39 @@ func TestInterpolationFuncKeys(t *testing.T) {
 	}
 }
 
+func TestInterpolationFuncValues(t *testing.T) {
+	testCases := []functionTestCase{
+		{
+			description: "Returns the values",
+			text:        `${values(foo)}`,
+			expectation: []interface{}{"other2", "other"},
+			vars: map[string]ast.Variable{
+				"foo": ast.Variable{
+					Type: ast.TypeMap,
+					Value: map[string]ast.Variable{
+						"bar2": ast.Variable{
+							Type:  ast.TypeString,
+							Value: "other2",
+						},
+						"bar": ast.Variable{
+							Type:  ast.TypeString,
+							Value: "other",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	valuesTestFunc := testInterpolationFunc(keyFuncs{"values": interpolationFuncValues})
+
+	for _, tc := range testCases {
+		t.Run(tc.description, func(t *testing.T) {
+			valuesTestFunc(t, tc)
+		})
+	}
+}
+
 func TestInterpolationFuncMerge(t *testing.T) {
 	testCases := []functionTestCase{
 		{

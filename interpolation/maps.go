@@ -88,6 +88,33 @@ func interpolationFuncKeys() ast.Function {
 	}
 }
 
+// interpolationFuncValues extracts the values from a map
+func interpolationFuncValues() ast.Function {
+	return ast.Function{
+		ArgTypes:   []ast.Type{ast.TypeMap},
+		ReturnType: ast.TypeList,
+		Variadic:   false,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			mapInput := inputs[0].(map[string]ast.Variable)
+			values := make([]interface{}, 0, len(mapInput)+1)
+			result := make([]ast.Variable, 0, len(mapInput)+1)
+			for _, val := range mapInput {
+				values = append(values, val)
+			}
+
+			for _, val := range values {
+				nativeValue, err := hil.InterfaceToVariable(val)
+				if err != nil {
+					return nil, err
+				}
+				result = append(result, nativeValue)
+			}
+
+			return result, nil
+		},
+	}
+}
+
 // interpolationFuncMerge will merge multiple maps into a single map. Last reference of a key will always win.
 func interpolationFuncMerge() ast.Function {
 	return ast.Function{

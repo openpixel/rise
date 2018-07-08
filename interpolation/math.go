@@ -46,3 +46,24 @@ func interpolationFuncMin() ast.Function {
 		},
 	}
 }
+
+// InterpolationFuncAvg calculates the average of the given numbers
+func interpolationFuncAvg() ast.Function {
+	return ast.Function{
+		ArgTypes:     []ast.Type{},
+		ReturnType:   ast.TypeFloat,
+		Variadic:     true,
+		VariadicType: ast.TypeFloat,
+		Callback: func(inputs []interface{}) (interface{}, error) {
+			inputLen := len(inputs)
+			if inputLen == 0 {
+				return nil, errors.New("avg function requires at least 1 inputs")
+			}
+			total := float64(0)
+			for _, input := range inputs {
+				total += input.(float64)
+			}
+			return total / float64(inputLen), nil
+		},
+	}
+}
