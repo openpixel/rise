@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/openpixel/rise/runner"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +29,7 @@ var RootCmd = &cobra.Command{
 		if inputs == "" {
 			log.Fatal("Must have an input")
 		}
-		err := runner.Run(&inputs, &outputs, &configFiles)
+		err := Run(inputs, outputs, configFiles)
 		if err != nil {
 			log.Fatal(err)
 		}

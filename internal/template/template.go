@@ -5,8 +5,8 @@ import (
 
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
-	"github.com/openpixel/rise/config"
-	"github.com/openpixel/rise/interpolation"
+	"github.com/openpixel/rise/internal/config"
+	"github.com/openpixel/rise/internal/interpolation"
 )
 
 // Template is a container for holding onto the ast Variables

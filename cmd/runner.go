@@ -1,22 +1,22 @@
-package runner
+package cmd
 
 import (
 	"io"
 	"io/ioutil"
 	"os"
 
-	"github.com/openpixel/rise/config"
-	"github.com/openpixel/rise/template"
+	"github.com/openpixel/rise/internal/config"
+	"github.com/openpixel/rise/internal/template"
 )
 
 // Run will run
-func Run(inputFile, outputFile *string, configFiles *[]string) error {
-	contents, err := ioutil.ReadFile(*inputFile)
+func Run(inputFile, outputFile string, configFiles []string) error {
+	contents, err := ioutil.ReadFile(inputFile)
 	if err != nil {
 		return err
 	}
 
-	configResult, err := config.LoadConfigFiles(*configFiles)
+	configResult, err := config.LoadConfigFiles(configFiles)
 	if err != nil {
 		return err
 	}
@@ -31,8 +31,8 @@ func Run(inputFile, outputFile *string, configFiles *[]string) error {
 		return err
 	}
 
-	if *outputFile != "" {
-		err = ioutil.WriteFile(*outputFile, []byte(result.Value.(string)), 0644)
+	if outputFile != "" {
+		err = ioutil.WriteFile(outputFile, []byte(result.Value.(string)), 0644)
 		if err != nil {
 			return err
 		}
