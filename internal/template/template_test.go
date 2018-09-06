@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/hil/ast"
-	"github.com/openpixel/rise/config"
+	"github.com/openpixel/rise/internal/config"
 )
 
 func TestTemplate_Render(t *testing.T) {

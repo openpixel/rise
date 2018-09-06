@@ -3,10 +3,11 @@ dist: trusty
 go:
   - 1.9.x
   - 1.10.x
+  - 1.11.x
 os:
   - linux
 env:
-  - DEP_VERSION="0.4.1"
+  - DEP_VERSION="0.5.0"
 go_import_path: github.com/openpixel/rise
 before_install:
   # Download the binary to bin folder in $GOPATH
