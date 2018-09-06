@@ -29,12 +29,12 @@ func TestTemplate_Render(t *testing.T) {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		result, err := tmpl.Render(`${has(var.foo, "bar")}`)
+		result, err := tmpl.Render(`${has(var.foo, "bar")} ${var.foo["bar"]}`)
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		if result.Value.(string) != "true" {
+		if result.Value.(string) != "true Bar" {
 			t.Fatalf("Unexpected result: Expected %s, got %s", "true", result.Value.(string))
 		}
 	})
@@ -81,6 +81,20 @@ func TestTemplate_Render(t *testing.T) {
 
 		if result.Value.(string) != "foo" {
 			t.Fatalf("Unexpected result: Expected %s, got %s", "foo", result.Value.(string))
+		}
+	})
+
+	t.Run("Test missing template", func(t *testing.T) {
+		tmpl, err := NewTemplate(&config.Result{
+			Variables: nil,
+			Templates: nil,
+		})
+		if err != nil {
+			t.Fatalf("Unexpected err: %s", err)
+		}
+		_, err = tmpl.Render(`${tmpl.foo}`)
+		if err == nil {
+			t.Fatal("unexpected nil err")
 		}
 	})
 }
