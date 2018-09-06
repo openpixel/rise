@@ -92,8 +92,6 @@ func (vf visitorFn) fn(n ast.Node) ast.Node {
 		if va, ok := vn.Key.(*ast.VariableAccess); ok {
 			vn.Key = vf.processVariable(va)
 		}
-	default:
-		return n
 	}
 	return n
 }
@@ -107,15 +105,20 @@ func (vf visitorFn) processVariable(va *ast.VariableAccess) ast.Node {
 			vf.resultErr = err
 			return va
 		}
-		resultN = vf.fn(resultN)
-		return resultN
+		if resultN != va {
+			resultN = vf.fn(resultN)
+			return resultN
+		}
 	}
 
 	return va
 }
 
 func (vf visitorFn) processTemplateNode(original ast.Node, name string) (replacement ast.Node, err error) {
-	template := vf.templates[name]
+	template, ok := vf.templates[name]
+	if !ok {
+		return original, nil
+	}
 
 	switch template.Type {
 	case ast.TypeString:

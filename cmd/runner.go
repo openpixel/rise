@@ -9,7 +9,8 @@ import (
 	"github.com/openpixel/rise/internal/template"
 )
 
-// Run will run
+// Run accepts an input, output and config files and performs interpolation.
+// If the output is empty, it writes to stdout
 func Run(inputFile, outputFile string, configFiles []string) error {
 	contents, err := ioutil.ReadFile(inputFile)
 	if err != nil {
