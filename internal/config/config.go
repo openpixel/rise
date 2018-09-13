@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -11,20 +12,20 @@ import (
 	"github.com/hashicorp/hil/ast"
 )
 
-// Config is a variable file config definition
-type Config struct {
-	Variables []VariableConfig `hcl:"variable"`
-	Templates []TemplateConfig `hcl:"template"`
+// config is a variable file config definition
+type config struct {
+	Variables []variableConfig `hcl:"variable"`
+	Templates []templateConfig `hcl:"template"`
 }
 
-// VariableConfig defines the structure for our variable config sections
-type VariableConfig struct {
+// variableConfig defines the structure for our variable config sections
+type variableConfig struct {
 	Name  string      `hcl:",key"`
 	Value interface{} `hcl:"value"`
 }
 
-// TemplateConfig defines the structure for our template config sections
-type TemplateConfig struct {
+// templateConfig defines the structure for our template config sections
+type templateConfig struct {
 	Name    string `hcl:",key"`
 	Content string `hcl:"content"` // a string that contains a simple template
 	File    string `hcl:"file"`    // a reference to a file that is relative to the config file
@@ -37,8 +38,28 @@ type Result struct {
 	Templates map[string]ast.Variable
 }
 
+func LoadExtras(args []string) (map[string]ast.Variable, error) {
+	extras := map[string]ast.Variable{}
+	for _, extra := range args {
+		extraResult := map[string]interface{}{}
+
+		err := json.Unmarshal([]byte(extra), &extraResult)
+		if err != nil {
+			return nil, err
+		}
+
+		for k, v := range extraResult {
+			extras[fmt.Sprintf("var.%s", k)], err = hil.InterfaceToVariable(v)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return extras, nil
+}
+
 // LoadConfigFiles will load all config files and merge values into appropriate values
-func LoadConfigFiles(configFiles []string) (*Result, error) {
+func LoadConfigFiles(configFiles []string, extras map[string]ast.Variable) (*Result, error) {
 	vars := make(map[string]ast.Variable)
 	templates := make(map[string]ast.Variable)
 	for _, file := range configFiles {
@@ -61,6 +82,11 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 		}
 	}
 
+	// apply extras to variable map
+	for k, v := range extras {
+		vars[k] = v
+	}
+
 	result := &Result{
 		Variables: vars,
 		Templates: templates,
@@ -68,7 +94,7 @@ func LoadConfigFiles(configFiles []string) (*Result, error) {
 	return result, nil
 }
 
-func prepareVariables(vars map[string]ast.Variable, config *Config) error {
+func prepareVariables(vars map[string]ast.Variable, config *config) error {
 	for _, variable := range config.Variables {
 		astVar, err := hil.InterfaceToVariable(variable.Value)
 		if err != nil {
@@ -79,7 +105,7 @@ func prepareVariables(vars map[string]ast.Variable, config *Config) error {
 	return nil
 }
 
-func prepareTemplates(baseFilePath string, templates map[string]ast.Variable, config *Config) (map[string]ast.Variable, error) {
+func prepareTemplates(baseFilePath string, templates map[string]ast.Variable, config *config) (map[string]ast.Variable, error) {
 	for _, template := range config.Templates {
 		var astVar ast.Variable
 		var err error
@@ -110,8 +136,8 @@ func prepareTemplates(baseFilePath string, templates map[string]ast.Variable, co
 }
 
 // parseConfig will parse the text into variable definitions
-func parseConfig(text string) (*Config, error) {
-	result := &Config{}
+func parseConfig(text string) (*config, error) {
+	result := &config{}
 
 	hclParseTree, err := hcl.Parse(text)
 	if err != nil {
