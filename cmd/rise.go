@@ -12,11 +12,14 @@ const version = "v0.2.0"
 var inputs string
 var outputs string
 var configFiles []string
+var extraVars []string
 
 func init() {
-	RootCmd.PersistentFlags().StringVarP(&inputs, "input", "i", "", "The file to perform interpolation on")
-	RootCmd.PersistentFlags().StringVarP(&outputs, "output", "o", "", "The file to output")
-	RootCmd.PersistentFlags().StringSliceVarP(&configFiles, "config", "c", []string{}, "The files that define the configuration to use for interpolation")
+	flags := RootCmd.PersistentFlags()
+	flags.StringVarP(&inputs, "input", "i", "", "The file to perform interpolation on")
+	flags.StringVarP(&outputs, "output", "o", "", "The file to output")
+	flags.StringSliceVarP(&configFiles, "config", "c", []string{}, "The files that define the configuration to use for interpolation")
+	flags.StringArrayVar(&extraVars, "var", []string{}, "Additional variables to apply. These always take priority.")
 
 	RootCmd.AddCommand(versionCmd)
 }
@@ -30,7 +33,7 @@ var RootCmd = &cobra.Command{
 		if inputs == "" {
 			log.Fatal("Must have an input")
 		}
-		err := Run(inputs, outputs, configFiles)
+		err := Run(inputs, outputs, configFiles, extraVars)
 		if err != nil {
 			log.Fatal(err)
 		}
