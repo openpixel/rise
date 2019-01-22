@@ -5,6 +5,8 @@ go:
 os:
   - linux
 go_import_path: github.com/openpixel/rise
+install:
+  - go mod download
 script:
   - go test -race ./...
   - ./coveralls.sh
