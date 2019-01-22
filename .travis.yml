@@ -1,10 +1,10 @@
 language: go
 dist: trusty
 go:
-  - 1.11.x
+  - 1.11.4
 os:
   - linux
 go_import_path: github.com/openpixel/rise
 script:
-  - go test -race -v ./...
+  - go test -race ./...
   - ./coveralls.sh
