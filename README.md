@@ -86,7 +86,6 @@ $ rise -i ./examples/input.json -o ./examples/output.json --config ./examples/va
 - More configuration CLI arguments
   - Support for directories as inputs/outputs
   - Support for globs (eg: /tmp/*.json)
-  - Support for var overrides at cli level (eg: --var "foo=bar")
 
 ## Inspiration
 

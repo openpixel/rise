@@ -65,6 +65,9 @@ func testInterpolationFunc(funcMap keyFuncs) func(t *testing.T, testCase functio
 			if actual.Value.(string) != testCase.expectation.(string) {
 				t.Fatalf("wrong result\ngiven %s\ngot:  %#v\nwant: %#v", testCase.text, actual.Value, testCase.expectation)
 			}
+		} else if _, ok := testCase.expectation.(func(*testing.T, interface{})); ok {
+			fn := testCase.expectation.(func(*testing.T, interface{}))
+			fn(t, actual.Value)
 		} else {
 			if !reflect.DeepEqual(actual.Value, testCase.expectation) {
 				t.Fatalf("wrong result\ngiven %s\ngot: %#v\nwant: %#v", testCase.text, actual.Value, testCase.expectation)
