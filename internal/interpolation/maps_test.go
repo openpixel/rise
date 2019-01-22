@@ -119,7 +119,30 @@ func TestInterpolationFuncValues(t *testing.T) {
 		{
 			description: "Returns the values",
 			text:        `${values(foo)}`,
-			expectation: []interface{}{"other2", "other"},
+			expectation: func(t *testing.T, val interface{}) {
+				result := val.([]interface{})
+				exp := []interface{}{"other2", "other"}
+
+				if len(result) != len(exp) {
+					t.Fatalf("slice length mismatched")
+				}
+
+				rMap := make(map[interface{}]int)
+				eMap := make(map[interface{}]int)
+
+				for _, elem := range result {
+					rMap[elem]++
+				}
+				for _, elem := range exp {
+					eMap[elem]++
+				}
+
+				for rMapKey, rMapVal := range rMap {
+					if eMap[rMapKey] != rMapVal {
+						t.Fatalf("mismatched slice values: %v, %v", result, exp)
+					}
+				}
+			},
 			vars: map[string]ast.Variable{
 				"foo": ast.Variable{
 					Type: ast.TypeMap,
