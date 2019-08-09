@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
+
 	"github.com/openpixel/rise/internal/config"
 	"github.com/openpixel/rise/internal/interpolation"
 )

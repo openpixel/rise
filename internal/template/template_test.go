@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/hil/ast"
+
 	"github.com/openpixel/rise/internal/config"
 )
 
