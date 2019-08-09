@@ -2,53 +2,52 @@ package cmd
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
-
 
 	"github.com/openpixel/rise/internal/config"
 	"github.com/openpixel/rise/internal/template"
 )
 
-// Run accepts an input, output and config files and performs interpolation.
-// If the output is empty, it writes to stdout
-func Run(inputFile, outputFile string, configFiles []string, extraVars []string) error {
-	contents, err := ioutil.ReadFile(inputFile)
-	if err != nil {
-		return err
-	}
-
+func prepareTemplate(configFiles []string, extraVars []string) (*template.Template, error) {
 	extras, err := config.LoadExtras(extraVars)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
 	configResult, err := config.LoadConfigFiles(configFiles, extras)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	return template.NewTemplate(configResult)
+}
 
-	t, err := template.NewTemplate(configResult)
+// process accepts an input, output and config files and performs interpolation.
+// If the output is empty, it writes to stdout
+func process(inputFile, outputFile string, configFiles []string, extraVars []string) error {
+	tmpl, err := prepareTemplate(configFiles, extraVars)
 	if err != nil {
 		return err
 	}
 
-	result, err := t.Render(string(contents))
+	f, err := os.Open(inputFile)
 	if err != nil {
 		return err
 	}
 
+	res, err := tmpl.Render(f)
+	if err != nil {
+		return err
+	}
+
+	var out io.Writer
 	if outputFile != "" {
-		err = ioutil.WriteFile(outputFile, []byte(result.Value.(string)), 0644)
+		out, err = os.Create(outputFile)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err = io.WriteString(os.Stdout, result.Value.(string))
-		if err != nil {
-			return err
-		}
+		out = os.Stdout
 	}
 
-	return nil
+	_, err = io.Copy(out, res)
+	return err
 }
