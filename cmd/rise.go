@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "v0.2.0"
+const version = "v0.4.0"
 
 var inputs string
 var outputs string
