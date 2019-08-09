@@ -39,9 +39,9 @@ type Result struct {
 }
 
 func LoadExtras(args []string) (map[string]ast.Variable, error) {
-	extras := map[string]ast.Variable{}
+	extras := make(map[string]ast.Variable)
 	for _, extra := range args {
-		extraResult := map[string]interface{}{}
+		extraResult := make(map[string]interface{})
 
 		err := json.Unmarshal([]byte(extra), &extraResult)
 		if err != nil {
@@ -87,11 +87,10 @@ func LoadConfigFiles(configFiles []string, extras map[string]ast.Variable) (*Res
 		vars[k] = v
 	}
 
-	result := &Result{
+	return &Result{
 		Variables: vars,
 		Templates: templates,
-	}
-	return result, nil
+	}, nil
 }
 
 func prepareVariables(vars map[string]ast.Variable, config *config) error {

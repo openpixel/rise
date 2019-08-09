@@ -1,16 +1,21 @@
 package template
 
 import (
+	"bytes"
+	"io"
 	"strings"
+	"sync"
 
 	"github.com/hashicorp/hil"
 	"github.com/hashicorp/hil/ast"
+
 	"github.com/openpixel/rise/internal/config"
 	"github.com/openpixel/rise/internal/interpolation"
 )
 
 // Template is a container for holding onto the ast Variables
 type Template struct {
+	mtx       sync.Mutex
 	vars      map[string]ast.Variable
 	templates map[string]ast.Variable
 }
@@ -26,12 +31,14 @@ func NewTemplate(configResult *config.Result) (*Template, error) {
 func (t *Template) buildConfig() *hil.EvalConfig {
 	vars := make(map[string]ast.Variable)
 
+	t.mtx.Lock()
 	for k, v := range t.vars {
 		vars[k] = v
 	}
 	for k, v := range t.templates {
 		vars[k] = v
 	}
+	t.mtx.Unlock()
 
 	return &hil.EvalConfig{
 		GlobalScope: &ast.BasicScope{
@@ -42,14 +49,17 @@ func (t *Template) buildConfig() *hil.EvalConfig {
 }
 
 // Render will parse the provided text and interpolate the known variables/functions
-func (t *Template) Render(text string) (hil.EvaluationResult, error) {
-	var resultErr error
-
+func (t *Template) Render(input io.Reader) (io.Reader, error) {
 	config := t.buildConfig()
 
-	tree, err := hil.Parse(text)
+	buf := new(bytes.Buffer)
+	_, err := buf.ReadFrom(input)
 	if err != nil {
-		return hil.InvalidResult, err
+		return nil, err
+	}
+	tree, err := hil.Parse(buf.String())
+	if err != nil {
+		return nil, err
 	}
 
 	vf := visitorFn{
@@ -58,20 +68,21 @@ func (t *Template) Render(text string) (hil.EvaluationResult, error) {
 	}
 	tree = tree.Accept(vf.fn)
 	if vf.resultErr != nil {
-		return hil.InvalidResult, resultErr
+		return nil, vf.resultErr
 	}
 
 	result, err := hil.Eval(tree, config)
 	if err != nil {
-		return hil.InvalidResult, err
+		return nil, err
 	}
 
-	return result, nil
+	return bytes.NewBufferString(result.Value.(string)), nil
 }
 
 type visitorFn struct {
 	resultErr error
 	config    *hil.EvalConfig
+	mtx       sync.Mutex
 	templates map[string]ast.Variable
 }
 
@@ -115,10 +126,12 @@ func (vf visitorFn) processVariable(va *ast.VariableAccess) ast.Node {
 }
 
 func (vf visitorFn) processTemplateNode(original ast.Node, name string) (replacement ast.Node, err error) {
+	vf.mtx.Lock()
 	template, ok := vf.templates[name]
 	if !ok {
 		return original, nil
 	}
+	vf.mtx.Unlock()
 
 	switch template.Type {
 	case ast.TypeString:

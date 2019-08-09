@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "v0.2.0"
+const version = "v0.4.0"
 
 var inputs string
 var outputs string
@@ -33,7 +33,7 @@ var RootCmd = &cobra.Command{
 		if inputs == "" {
 			log.Fatal("Must have an input")
 		}
-		err := Run(inputs, outputs, configFiles, extraVars)
+		err := process(inputs, outputs, configFiles, extraVars)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -8,3 +8,4 @@ docs/_build
 _book
 node_modules
 rise
+.vscode

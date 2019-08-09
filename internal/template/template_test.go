@@ -1,11 +1,20 @@
 package template
 
 import (
+	"bytes"
+	"io"
 	"testing"
 
 	"github.com/hashicorp/hil/ast"
+
 	"github.com/openpixel/rise/internal/config"
 )
+
+func stringFromReader(reader io.Reader) string {
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(reader)
+	return buf.String()
+}
 
 func TestTemplate_Render(t *testing.T) {
 	t.Run("Test render with variable passed", func(t *testing.T) {
@@ -29,13 +38,13 @@ func TestTemplate_Render(t *testing.T) {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		result, err := tmpl.Render(`${has(var.foo, "bar")} ${var.foo["bar"]}`)
+		result, err := tmpl.Render(bytes.NewBufferString(`${has(var.foo, "bar")} ${var.foo["bar"]}`))
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		if result.Value.(string) != "true Bar" {
-			t.Fatalf("Unexpected result: Expected %s, got %s", "true", result.Value.(string))
+		if stringFromReader(result) != "true Bar" {
+			t.Fatalf("Unexpected result: Expected %s, got %s", "true", stringFromReader(result))
 		}
 	})
 
@@ -55,13 +64,13 @@ func TestTemplate_Render(t *testing.T) {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		result, err := tmpl.Render(`${tmpl.foo}`)
+		result, err := tmpl.Render(bytes.NewBufferString(`${tmpl.foo}`))
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		if result.Value.(string) != "This is a template foo" {
-			t.Fatalf("Unexpected result: Expected %s, got %s", "This is a template foo", result.Value.(string))
+		if stringFromReader(result) != "This is a template foo" {
+			t.Fatalf("Unexpected result: Expected %s, got %s", "This is a template foo", stringFromReader(result))
 		}
 	})
 
@@ -74,13 +83,13 @@ func TestTemplate_Render(t *testing.T) {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		result, err := tmpl.Render(`${lower("FOO")}`)
+		result, err := tmpl.Render(bytes.NewBufferString(`${lower("FOO")}`))
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
 
-		if result.Value.(string) != "foo" {
-			t.Fatalf("Unexpected result: Expected %s, got %s", "foo", result.Value.(string))
+		if stringFromReader(result) != "foo" {
+			t.Fatalf("Unexpected result: Expected %s, got %s", "foo", stringFromReader(result))
 		}
 	})
 
@@ -92,7 +101,7 @@ func TestTemplate_Render(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Unexpected err: %s", err)
 		}
-		_, err = tmpl.Render(`${tmpl.foo}`)
+		_, err = tmpl.Render(bytes.NewBufferString(`${tmpl.foo}`))
 		if err == nil {
 			t.Fatal("unexpected nil err")
 		}
