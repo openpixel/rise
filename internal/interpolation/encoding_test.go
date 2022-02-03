@@ -52,7 +52,7 @@ func TestInterpolationFuncJSONEncode(t *testing.T) {
 		},
 		{
 			description: "Advanced list encoding",
-			text: 		 `${jsonencode(list(map("foo", "bar")))}`,
+			text:        `${jsonencode(list(map("foo", "bar")))}`,
 			expectation: `[{"foo":"bar"}]`,
 		},
 		{

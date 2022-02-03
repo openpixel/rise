@@ -121,10 +121,10 @@ func TestPrepareVariables(t *testing.T) {
 
 func TestLoadExtras(t *testing.T) {
 	testCases := []struct {
-		desc string
-		args []string
+		desc        string
+		args        []string
 		expectation map[string]ast.Variable
-		error bool
+		error       bool
 	}{
 		{
 			"successfully load vars",
@@ -132,7 +132,7 @@ func TestLoadExtras(t *testing.T) {
 			map[string]ast.Variable{
 				"var.i": {
 					Value: "foo",
-					Type: ast.TypeString,
+					Type:  ast.TypeString,
 				},
 			},
 			false,
@@ -162,7 +162,7 @@ func TestLoadConfigFiles(t *testing.T) {
 	testCases := []struct {
 		description string
 		filenames   []string
-		extras		map[string]ast.Variable
+		extras      map[string]ast.Variable
 		result      *Result
 		error       bool
 	}{
@@ -216,7 +216,7 @@ func TestLoadConfigFiles(t *testing.T) {
 			map[string]ast.Variable{
 				"var.h": {
 					Value: "foo",
-					Type: ast.TypeString,
+					Type:  ast.TypeString,
 				},
 			},
 			&Result{
@@ -227,7 +227,7 @@ func TestLoadConfigFiles(t *testing.T) {
 					},
 					"var.h": {
 						Value: "foo",
-						Type: ast.TypeString,
+						Type:  ast.TypeString,
 					},
 				},
 				Templates: map[string]ast.Variable{

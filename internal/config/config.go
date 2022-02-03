@@ -38,6 +38,7 @@ type Result struct {
 	Templates map[string]ast.Variable
 }
 
+// LoadExtras attemps to load any additional vars
 func LoadExtras(args []string) (map[string]ast.Variable, error) {
 	extras := make(map[string]ast.Variable)
 	for _, extra := range args {
