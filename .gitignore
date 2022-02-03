@@ -9,3 +9,7 @@ _book
 node_modules
 rise
 .vscode
+
+*.nix
+.envrc
+.direnv
